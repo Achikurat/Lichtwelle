@@ -1,2 +1,4 @@
-# Lichtwelle
-Modern lightshow software with built in MIR mapping capabilities.
+#Lichtwelle.
+
+Modern DMX controller software with MIR integration.
+More information soon...
