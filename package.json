@@ -11,8 +11,11 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "dmx": "^0.2.5",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "midi": "^2.0.0",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
