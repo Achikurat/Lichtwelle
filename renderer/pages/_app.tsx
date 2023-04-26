@@ -1,7 +1,7 @@
 import electron from "electron";
 import React from "react";
-import { IpcMessageType } from "../../shared/enums";
-import {EngineState} from "../../shared/types"
+import { IpcMessageType } from "../../lib/enums";
+import {EngineState} from "../../lib/types"
 import { create } from "zustand";
 import { AppProps } from "next/app";
 
