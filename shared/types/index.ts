@@ -1,14 +1,12 @@
 import {
-  Message,
-  AppStateChangeRequest,
-  AppStateChangeResponse,
+  IpcMessage,
+  EngineStateChangeRequest
 } from "./message";
 
-import { AppState } from "./app";
+import { EngineState } from "./app";
 
 export type {
-  Message,
-  AppStateChangeRequest,
-  AppStateChangeResponse,
-  AppState,
+  IpcMessage,
+  EngineStateChangeRequest,
+  EngineState,
 };

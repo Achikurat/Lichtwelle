@@ -1,1 +1,2 @@
-export type AppState = {};
+export type EngineState = {
+};

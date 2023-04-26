@@ -1,3 +1,3 @@
-import { MessageType } from "./message";
+import { IpcMessageType } from "./message";
 
-export { MessageType };
+export { IpcMessageType };

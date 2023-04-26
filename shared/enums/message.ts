@@ -1,3 +1,3 @@
-export enum MessageType {
-  AppStateChange = "app-state-change",
+export enum IpcMessageType {
+  EngineStateChange = "engine-state-change",
 }

@@ -1,7 +1,5 @@
-import { MessageType } from "../enums/message";
-import { AppState } from "./app";
+import { EngineState } from "./app";
 
-export type Message = AppStateChangeRequest | AppStateChangeResponse;
+export type IpcMessage = EngineStateChangeRequest;
 
-export type AppStateChangeRequest = Partial<AppState>;
-export type AppStateChangeResponse = AppState;
+export type EngineStateChangeRequest = Partial<EngineState>;
