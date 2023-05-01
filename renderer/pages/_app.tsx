@@ -1,35 +1,52 @@
 import electron from "electron";
 import React from "react";
 import { IpcMessageType } from "../../lib/enums";
-import {EngineState} from "../../lib/types"
+import { SessionSettings, SessionState } from "../../lib/types";
 import { create } from "zustand";
 import { AppProps } from "next/app";
 
 const ipcRenderer = electron.ipcRenderer || false;
 
-const initialEngineState = {
+const initalSessionSettings: SessionSettings = {
+  bpm: 0,
+  stepCompileResoultion: 100,
+  dmxRefreshRate: 0,
+  interpolate: true,
+  maxStep: 7,
+};
 
-}
+const initialSessionState: SessionState = {
+  uids: [],
+  fixtures: [],
+  cues: [],
+  groups: [],
+  directMappings: [],
+  layouts: [],
+  settings: initalSessionSettings,
+};
 
-type EngineStore = EngineState & {
-  updateEngineState: (partialState: Partial<EngineState>) => void;
-}
+type SessionStore = SessionState & {
+  updateSessionState: (partialState: Partial<SessionState>) => void;
+};
 
-function compileOnUpdate(partialState: EngineState, newState: EngineState) {
+function compileOnUpdate(
+  partialState: Partial<SessionState>,
+  newState: SessionState
+) {
   //TODO: Check need for reduced updates
-  if(ipcRenderer){
-    ipcRenderer.send(IpcMessageType.EngineStateChange, newState)
+  if (ipcRenderer) {
+    ipcRenderer.send(IpcMessageType.SessionStateChange, newState);
   }
 }
 
-const useEngineStore = create<EngineStore>((set) => ({
-  ...initialEngineState,
-  updateEngineState: (partialState: Partial<EngineState>) =>
+const useSessionStore = create<SessionStore>((set) => ({
+  ...initialSessionState,
+  updateSessionState: (partialState: Partial<SessionState>) =>
     set((state) => {
-      const newState = {...state, partialState};
+      const newState = { ...state, partialState };
       compileOnUpdate(partialState, newState);
       return newState;
-    })
+    }),
 }));
 
 export default function App({ Component, pageProps }: AppProps) {

@@ -1,3 +1,3 @@
 export enum IpcMessageType {
-  EngineStateChange = "engine-state-change",
+  SessionStateChange = "session-state-change",
 }
