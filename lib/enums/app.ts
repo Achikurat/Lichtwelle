@@ -26,7 +26,7 @@ export enum View {
   FIXTURES = "Fixtures",
   GROUPS = "Groups",
   CUE_EDITOR = "Cue Editor",
-  LAYOUT = "Layout",
+  MAPPING = "Mapping",
   MIR = "MIR",
   PERFORMANCE = "Performance",
 }

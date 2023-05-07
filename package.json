@@ -20,6 +20,7 @@
     "electron-store": "^8.1.0",
     "framer-motion": "^10.12.8",
     "midi": "^2.0.0",
+    "react-icons": "^4.8.0",
     "zustand": "^4.3.7"
   },
   "devDependencies": {

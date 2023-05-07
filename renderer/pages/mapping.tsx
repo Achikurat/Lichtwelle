@@ -1,7 +1,7 @@
 import React from "react";
 
-function Layout() {
+function Mapping() {
   return <></>;
 }
 
-export default Layout;
+export default Mapping;

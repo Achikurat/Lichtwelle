@@ -4,7 +4,8 @@ export const theme = extendTheme({
   semanticTokens: {
     colors: {
       background: "gray.700",
-      accent: "green.200",
+      darkBackground: "gray.800",
+      accent: "teal.200",
       text: "gray.50",
     },
   },
