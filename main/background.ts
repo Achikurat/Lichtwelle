@@ -17,6 +17,7 @@ if (isProd) {
   const mainWindow = createWindow("main", {
     width: 1600,
     height: 900,
+    autoHideMenuBar: true,
   });
 
   if (isProd) {
@@ -32,6 +33,6 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-ipcMain.on(IpcMessageType.EngineStateChange, (event, arg) => {
+ipcMain.on(IpcMessageType.SessionStateChange, (event, arg) => {
   console.log("Engine Update", arg);
 });

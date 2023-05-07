@@ -1,4 +1,10 @@
-import { UidType, LayoutType, EasingFunction, TriggerType } from "../enums/";
+import {
+  UidType,
+  LayoutType,
+  EasingFunction,
+  TriggerType,
+  View,
+} from "../enums/";
 
 export type SessionState = {
   uids: Uid[];
@@ -7,6 +13,7 @@ export type SessionState = {
   cues: Cue[];
   layouts: Layout[];
   directMappings: undefined[];
+  activeView: View;
   settings: SessionSettings;
 };
 

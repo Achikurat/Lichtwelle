@@ -12,9 +12,13 @@
     "lint": "eslint --ext .js,.ts,.tsx"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.6.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "dmx": "^0.2.5",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
+    "framer-motion": "^10.12.8",
     "midi": "^2.0.0",
     "zustand": "^4.3.7"
   },

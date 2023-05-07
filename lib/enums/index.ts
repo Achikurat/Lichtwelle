@@ -1,5 +1,5 @@
 import { IpcMessageType } from "./message";
-import { EasingFunction, LayoutType, TriggerType, UidType } from "./app";
+import { EasingFunction, LayoutType, TriggerType, UidType, View } from "./app";
 import { QueueActionType } from "./engine";
 
 export {
@@ -9,4 +9,5 @@ export {
   EasingFunction,
   TriggerType,
   QueueActionType,
+  View,
 };
