@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { Button } from "./components";
 
 export const theme = extendTheme({
   semanticTokens: {
@@ -15,5 +16,8 @@ export const theme = extendTheme({
         bg: "background",
       },
     }),
+  },
+  components: {
+    Button,
   },
 });

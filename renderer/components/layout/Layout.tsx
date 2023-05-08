@@ -21,16 +21,11 @@ export default function Layout({ children }: Props) {
       return (
         <Link href={"/" + view.toLowerCase()} key={idx}>
           <Button
+          isActive={isActive}
             onMouseEnter={() => setHoveredView(View[view])}
             onMouseLeave={() => setHoveredView(null)}
             borderRadius="md"
             h="100%"
-            p="6"
-            background={isActive ? "accent" : "darkBackground"}
-            color={isActive ? "darkBackground" : "accent"}
-            fontSize="md"
-            _active={{}}
-            _hover={{ boxShadow: "xl" }}
           >
             <HStack>
             {getTabIcon(View[view])}
