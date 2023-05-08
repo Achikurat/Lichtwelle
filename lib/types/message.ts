@@ -1,5 +1,5 @@
-import { EngineState } from "./app";
+import { SessionState } from "./app";
 
 export type IpcMessage = EngineStateChangeRequest;
 
-export type EngineStateChangeRequest = Partial<EngineState>;
+export type EngineStateChangeRequest = Partial<SessionState>;
