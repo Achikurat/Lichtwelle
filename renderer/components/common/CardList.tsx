@@ -1,3 +1,6 @@
-export default function CardList(){
+import React from "react"
 
+export default function CardList(){
+    return(<>
+    </>)
 }
