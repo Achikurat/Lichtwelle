@@ -4,10 +4,10 @@ import { Button } from "./components";
 const theme = extendTheme({
   semanticTokens: {
     colors: {
-      background: "gray.700",
-      darkBackground: "gray.800",
-      accent: "teal.200",
-      text: "gray.50",
+      background: "#323232",
+      darkBackground: "#212121",
+      accent: "#ECA869",
+      text: "#EEEEEE",
     },
   },
   styles: {

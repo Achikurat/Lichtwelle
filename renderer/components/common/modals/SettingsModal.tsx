@@ -2,6 +2,8 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -17,11 +19,16 @@ import { useSessionStore } from "../../../common/store/sessionStore";
 import { PersistentSettings } from "../../../../lib/types";
 import { reloadFixtureDefinitions } from "../../../common/fixture";
 import { usePersistentStore } from "../../../common/store/persistentStore";
+import { BsFolder } from "react-icons/bs";
+import electron, { OpenDialogReturnValue } from "electron";
+import { IpcMessageType } from "../../../../lib/enums";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
+
+const ipcRenderer = electron.ipcRenderer || false;
 
 export default function SettingsModal({ isOpen, onClose }: Props) {
   const toast = useToast();
@@ -31,11 +38,9 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
   function updateSettings() {
     usePersistentStore.setState(localPersistentSettings);
 
-    console.log(usePersistentStore.getState());
-
     reloadFixtureDefinitions((fixtureDefintions) => {
       useSessionStore.setState({ fixtureDefinitions: fixtureDefintions });
-      console.log("Updated Settings", fixtureDefintions);
+
       toast({
         title: "Settings updated.",
         description: "Save and reload successfull!",
@@ -44,6 +49,19 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
         isClosable: true,
       });
     });
+  }
+
+  function selectDirectory() {
+    if (ipcRenderer) {
+      ipcRenderer
+        .invoke(IpcMessageType.OpenDirectoryPrompt)
+        .then((result: OpenDialogReturnValue) => {
+          setLocalPersistentSettings({
+            ...localPersistentSettings,
+            fixtureDefinitionsLocation: result.filePaths[0],
+          });
+        });
+    }
   }
 
   return (
@@ -55,15 +73,21 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
         <ModalBody>
           <FormControl>
             <FormLabel>Fixture Definition Location</FormLabel>
-            <Input
-              onChange={(e) =>
-                setLocalPersistentSettings({
-                  ...localPersistentSettings,
-                  fixtureDefinitionsLocation: e.target.value,
-                })
-              }
-              value={localPersistentSettings.fixtureDefinitionsLocation}
-            />
+            <HStack height="55px">
+              <Input
+                height="100%"
+                onChange={(e) =>
+                  setLocalPersistentSettings({
+                    ...localPersistentSettings,
+                    fixtureDefinitionsLocation: e.target.value,
+                  })
+                }
+                value={localPersistentSettings.fixtureDefinitionsLocation}
+              />
+              <Button width="50px" height="100%" onClick={selectDirectory}>
+                <BsFolder />
+              </Button>
+            </HStack>
           </FormControl>
         </ModalBody>
         <ModalFooter>

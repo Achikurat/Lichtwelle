@@ -1,4 +1,4 @@
-import { app, ipcMain } from "electron";
+import { app, dialog, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { IpcMessageType } from "../lib/enums";
@@ -33,6 +33,12 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}/home`);
     mainWindow.webContents.openDevTools();
   }
+
+  ipcMain.handle(IpcMessageType.OpenDirectoryPrompt, async (event, ...args) => {
+    return await dialog.showOpenDialog(mainWindow, {
+      properties: ["openDirectory"],
+    });
+  });
 })();
 
 app.on("window-all-closed", () => {

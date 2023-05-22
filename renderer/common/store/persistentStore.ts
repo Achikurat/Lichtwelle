@@ -15,32 +15,16 @@ type PersistentStore = PersistentSettings & {
   updatePersistentStore: (partialSettings: Partial<PersistentSettings>) => void;
 };
 
-type Middleware<S> = (
-  config: StateCreator<S>
-) => (set: SetState<S>, get: GetState<S>, api: StoreApi<S>) => S;
+export const usePersistentStore = create<PersistentStore>((set) => ({
+  ...((store.get("persistentSettings") as PersistentSettings) ||
+    initialPersistentSettings),
+  updatePersistentStore: (partialSettings: Partial<PersistentSettings>) =>
+    set((state) => {
+      const newSettings = { ...state, partialSettings };
+      return newSettings;
+    }),
+}));
 
-const saveToFile: Middleware<PersistentStore> = (config) => (set, get, api) =>
-  config(
-    (...args) => {
-      console.log("works");
-
-      set(...args);
-      console.log("new state", get());
-
-      store.set("persistentSettings", get());
-    },
-    get,
-    api
-  );
-
-export const usePersistentStore = create<PersistentStore>(
-  saveToFile((set) => ({
-    ...((store.get("persistentSettings") as PersistentSettings) ||
-      initialPersistentSettings),
-    updatePersistentStore: (partialSettings: Partial<PersistentSettings>) =>
-      set((state) => {
-        const newSettings = { ...state, partialSettings };
-        return newSettings;
-      }),
-  }))
+usePersistentStore.subscribe((settings) =>
+  store.set("persistentSettings", settings)
 );
