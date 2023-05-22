@@ -41,10 +41,9 @@ export type Capability = {
 };
 
 export type Channel = {
-  nane: string;
-  type: undefined;
+  name: string;
   capabilities: Capability[];
-  fineChannel: number;
+  defaultValue?: number;
 };
 
 export type CueTrack = {
@@ -83,7 +82,7 @@ export type Fixture = {
 
 export type FixtureDefinition = {
   name: string;
-  channels: (Channel | Channel[])[];
+  channels: { [key: string]: Channel };
   src: string;
 };
 

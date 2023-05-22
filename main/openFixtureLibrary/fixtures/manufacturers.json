@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/OpenLightingProject/open-fixture-library/schema-12.3.0/schemas/manufacturers.json",
+  "glp": {
+    "name": "GLP",
+    "comment": "German Light Products",
+    "website": "https://www.glp.de/en/",
+    "rdmId": 26476
+  }
+}

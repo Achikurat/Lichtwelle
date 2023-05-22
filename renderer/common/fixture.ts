@@ -4,6 +4,8 @@ import { useSessionStore } from "./store/sessionStore";
 import { IpcMessageType } from "../../lib/enums";
 import { usePersistentStore } from "./store/persistentStore";
 
+const ipcRenderer = electron.ipcRenderer || false;
+
 export function addFixtures(fixtures: Fixture[]) {
   const [sessionFixtures, updateSessionState] = useSessionStore((state) => [
     state.fixtures,
@@ -21,7 +23,6 @@ export function reloadFixtureDefinitions(
   const fixtureDefinitionsLocation =
     usePersistentStore.getState().fixtureDefinitionsLocation;
 
-  const ipcRenderer = electron.ipcRenderer || false;
   ipcRenderer &&
     ipcRenderer
       .invoke(

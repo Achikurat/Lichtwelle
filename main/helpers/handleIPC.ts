@@ -1,32 +1,26 @@
 import { log } from "console";
 import { FixtureDefinition } from "../../lib/types";
 import * as fs from "fs";
+import { parseFixtureJSON } from "./parser";
+import path from "path";
 
-export function handleReloadFixtureDefinitions(
+export async function handleReloadFixtureDefinitions(
   fixtureDefinitionsLocation: string
 ): Promise<FixtureDefinition[]> {
-  return new Promise<FixtureDefinition[]>((resolve, reject) => {
-    if (fs.existsSync(fixtureDefinitionsLocation)) {
-      fs.readdir(fixtureDefinitionsLocation, (err, files) => {
-        const filteredFiles = files.filter((file) => file.endsWith(".json"));
+  if (fs.existsSync(fixtureDefinitionsLocation)) {
+    const files = fs.readdirSync(fixtureDefinitionsLocation);
+    const filteredFiles = files.filter((file) => file.endsWith(".json"));
 
-        if (filteredFiles.length > 0) {
-          //TODO: implement actual parsing
-          const fixtureDefinitions: FixtureDefinition[] = filteredFiles.map(
-            (file): FixtureDefinition => {
-              return {
-                name: "test",
-                channels: [],
-                src: file,
-              };
-            }
-          );
-
-          resolve(fixtureDefinitions);
-        } else resolve([]);
-      });
-    } else {
-      resolve([]);
-    }
-  });
+    if (filteredFiles.length > 0) {
+      const fixtureDefinitions = Promise.all(
+        filteredFiles.map(
+          async (file): Promise<FixtureDefinition> =>
+            await parseFixtureJSON(path.join(fixtureDefinitionsLocation, file))
+        )
+      );
+      return fixtureDefinitions;
+    } else return [];
+  } else {
+    return [];
+  }
 }

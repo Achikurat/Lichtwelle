@@ -32,6 +32,9 @@ const ipcRenderer = electron.ipcRenderer || false;
 
 export default function SettingsModal({ isOpen, onClose }: Props) {
   const toast = useToast();
+  const fixtureDefinitions = useSessionStore(
+    (state) => state.fixtureDefinitions
+  );
   const [localPersistentSettings, setLocalPersistentSettings] =
     useState<PersistentSettings>(usePersistentStore.getState());
 
@@ -88,6 +91,10 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
                 <BsFolder />
               </Button>
             </HStack>
+            <FormLabel>
+              Fixture Defintion Count:{" "}
+              {fixtureDefinitions && fixtureDefinitions.length}
+            </FormLabel>
           </FormControl>
         </ModalBody>
         <ModalFooter>
