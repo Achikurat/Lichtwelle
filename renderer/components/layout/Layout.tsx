@@ -1,11 +1,30 @@
 import React, { ReactElement, useState } from "react";
-import { Box, Button, Center, Collapse, HStack, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Collapse,
+  HStack,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { View } from "../../../lib/enums";
 import { ReactNode, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { BsHouse, BsQuestionCircle, BsLamp, BsFolder, BsCaretRightSquare, BsGrid3X3, BsSoundwave, BsRocketTakeoff } from "react-icons/bs"
+import {
+  BsHouse,
+  BsQuestionCircle,
+  BsLamp,
+  BsFolder,
+  BsCaretRightSquare,
+  BsGrid3X3,
+  BsSoundwave,
+  BsRocketTakeoff,
+  BsGear,
+} from "react-icons/bs";
 import HExpandable from "./HExpandable";
+import { SettingsModal } from "../common/modals";
 
 type Props = {
   children: ReactNode;
@@ -13,6 +32,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   const [hoverdView, setHoveredView] = useState<View>(null);
+  const { isOpen, onToggle, onClose } = useDisclosure();
 
   const router = useRouter();
   const navigationTabs = useMemo(() => {
@@ -21,17 +41,17 @@ export default function Layout({ children }: Props) {
       return (
         <Link href={"/" + view.toLowerCase()} key={idx}>
           <Button
-          isActive={isActive}
+            isActive={isActive}
             onMouseEnter={() => setHoveredView(View[view])}
             onMouseLeave={() => setHoveredView(null)}
             borderRadius="md"
             h="100%"
           >
             <HStack>
-            {getTabIcon(View[view])}
-            <HExpandable isVisible={hoverdView === View[view]}>
-              {View[view]}
-            </HExpandable>
+              {getTabIcon(View[view])}
+              <HExpandable isVisible={hoverdView === View[view]}>
+                {View[view]}
+              </HExpandable>
             </HStack>
           </Button>
         </Link>
@@ -55,6 +75,10 @@ export default function Layout({ children }: Props) {
           spacing="3"
         >
           {navigationTabs}
+          <Button ml="auto !important" order="2" onClick={onToggle}>
+            <BsGear />
+          </Button>
+          <SettingsModal isOpen={isOpen} onClose={onClose} />
         </HStack>
         <Box
           flexGrow="1"
@@ -72,23 +96,22 @@ export default function Layout({ children }: Props) {
 }
 
 function getTabIcon(view: View): ReactElement {
-
-  switch(view){
+  switch (view) {
     case View.HOME:
       return <BsHouse />;
     case View.FIXTURES:
-      return <BsLamp />
+      return <BsLamp />;
     case View.GROUPS:
-      return <BsFolder />
+      return <BsFolder />;
     case View.CUE_EDITOR:
-      return <BsCaretRightSquare />
+      return <BsCaretRightSquare />;
     case View.MAPPING:
-      return <BsGrid3X3 />
+      return <BsGrid3X3 />;
     case View.MIR:
-      return <BsSoundwave />
+      return <BsSoundwave />;
     case View.PERFORMANCE:
-      return <BsRocketTakeoff />
+      return <BsRocketTakeoff />;
     default:
-      return <BsQuestionCircle />
+      return <BsQuestionCircle />;
   }
 }

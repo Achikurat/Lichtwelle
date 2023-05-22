@@ -16,7 +16,6 @@ export type SessionState = {
   directMappings: undefined[];
   activeView: View;
   sessionSettings: SessionSettings;
-  persistentSettings: PersistentSettings;
 };
 
 export type SessionSettings = {
@@ -29,7 +28,7 @@ export type PersistentSettings = {
   interpolate: boolean;
   dmxRefreshRate: number;
   fixtureDefinitionsLocation: string;
-}
+};
 
 export type Uid = {
   type: UidType;

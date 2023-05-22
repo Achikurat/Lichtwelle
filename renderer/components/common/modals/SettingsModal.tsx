@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import { useSessionStore } from "../../../common/store/sessionStore";
 import { PersistentSettings } from "../../../../lib/types";
 import { reloadFixtureDefinitions } from "../../../common/fixture";
-import Store from "electron-store";
+import { usePersistentStore } from "../../../common/store/persistentStore";
 
 type Props = {
   isOpen: boolean;
@@ -25,32 +25,22 @@ type Props = {
 
 export default function SettingsModal({ isOpen, onClose }: Props) {
   const toast = useToast();
-  const store = new Store();
-  const [persistentSettings, updateSessionState] = useSessionStore((state) => [
-    state.persistentSettings,
-    state.updateSessionState,
-  ]);
   const [localPersistentSettings, setLocalPersistentSettings] =
-    useState<PersistentSettings>(persistentSettings);
+    useState<PersistentSettings>(usePersistentStore.getState());
 
   function updateSettings() {
+    usePersistentStore.setState(localPersistentSettings);
+
+    console.log(usePersistentStore.getState());
+
     reloadFixtureDefinitions((fixtureDefintions) => {
-      //store to File
-      store.set("persistentSettings", {
-        ...localPersistentSettings,
-        fixtureDefintions: fixtureDefintions,
-      });
-      //Update Session State
-      updateSessionState({
-        persistentSettings: localPersistentSettings,
-        fixtureDefinitions: fixtureDefintions,
-      });
-      console.log("Updated Settings");
+      useSessionStore.setState({ fixtureDefinitions: fixtureDefintions });
+      console.log("Updated Settings", fixtureDefintions);
       toast({
         title: "Settings updated.",
         description: "Save and reload successfull!",
         status: "success",
-        duration: 100,
+        duration: 3000,
         isClosable: true,
       });
     });

@@ -14,13 +14,6 @@ const initalSessionSettings: SessionSettings = {
   maxStep: 7,
 };
 
-const initialPersistentSettings: PersistentSettings = {
-  stepCompileResoultion: 100,
-  dmxRefreshRate: 0,
-  interpolate: true,
-  fixtureDefinitionsLocation: "",
-};
-
 const initialSessionState: SessionState = {
   uids: [],
   fixtures: [],
@@ -31,7 +24,6 @@ const initialSessionState: SessionState = {
   layouts: [],
   activeView: View.HOME,
   sessionSettings: initalSessionSettings,
-  persistentSettings: initialPersistentSettings,
 };
 
 type SessionStore = SessionState & {

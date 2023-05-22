@@ -33,15 +33,6 @@ export default function App({ Component, pageProps }: AppProps) {
   */
 
   useEffect(() => {
-    //load settings from File
-    const store = new Store();
-    const loadedSettings = store.get(
-      "persistentSettings"
-    ) as PersistentSettings;
-    updateSessionState({ persistentSettings: loadedSettings });
-  }, []);
-
-  useEffect(() => {
     //reload Fixture Definitions
     reloadFixtureDefinitions((fixtureDefinitions) => {
       updateSessionState({

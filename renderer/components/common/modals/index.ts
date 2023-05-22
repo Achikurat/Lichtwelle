@@ -1,3 +1,4 @@
 import AddFixtureModal from "./AddFixtureModal";
+import SettingsModal from "./SettingsModal";
 
-export { AddFixtureModal };
+export { AddFixtureModal, SettingsModal };

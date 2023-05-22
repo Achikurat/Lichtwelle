@@ -2,9 +2,10 @@ import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { IpcMessageType } from "../lib/enums";
-import Store from "electron-store"
+import Store from "electron-store";
 import { handleReloadFixtureDefinitions } from "./helpers/handleIPC";
 import { PersistentSettings } from "../lib/types";
+import { StyleKeyframesDefinition } from "framer-motion";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -38,11 +39,13 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-ipcMain.handle(IpcMessageType.ReloadFixtureDefinitions, (event, arg) => {
-  const persistentSettings = arg as PersistentSettings;
-  return handleReloadFixtureDefinitions(persistentSettings);
-})
+ipcMain.handle(
+  IpcMessageType.ReloadFixtureDefinitions,
+  async (event, ...args) => {
+    return await handleReloadFixtureDefinitions(args[0] as string);
+  }
+);
 
-ipcMain.on(IpcMessageType.SessionStateChange, (event, arg) => {
-  console.log("Engine Update", arg);
+ipcMain.on(IpcMessageType.SessionStateChange, (event, ...args) => {
+  console.log("Engine Update", args);
 });
