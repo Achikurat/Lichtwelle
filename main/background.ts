@@ -2,6 +2,9 @@ import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { IpcMessageType } from "../lib/enums";
+import Store from "electron-store"
+import { handleReloadFixtureDefinitions } from "./helpers/handleIPC";
+import { PersistentSettings } from "../lib/types";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -13,6 +16,8 @@ if (isProd) {
 
 (async () => {
   await app.whenReady();
+
+  Store.initRenderer();
 
   const mainWindow = createWindow("main", {
     width: 1600,
@@ -32,6 +37,11 @@ if (isProd) {
 app.on("window-all-closed", () => {
   app.quit();
 });
+
+ipcMain.handle(IpcMessageType.ReloadFixtureDefinitions, (event, arg) => {
+  const persistentSettings = arg as PersistentSettings;
+  return handleReloadFixtureDefinitions(persistentSettings);
+})
 
 ipcMain.on(IpcMessageType.SessionStateChange, (event, arg) => {
   console.log("Engine Update", arg);

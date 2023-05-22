@@ -1,25 +1,37 @@
-import { ipcRenderer } from "electron";
+import electron from "electron";
 import { create } from "zustand";
 import { View, IpcMessageType } from "../../../lib/enums";
-import { SessionSettings, SessionState } from "../../../lib/types";
+import {
+  PersistentSettings,
+  SessionSettings,
+  SessionState,
+} from "../../../lib/types";
+
+const ipcRenderer = electron.ipcRenderer || false;
 
 const initalSessionSettings: SessionSettings = {
   bpm: 0,
+  maxStep: 7,
+};
+
+const initialPersistentSettings: PersistentSettings = {
   stepCompileResoultion: 100,
   dmxRefreshRate: 0,
   interpolate: true,
-  maxStep: 7,
+  fixtureDefinitionsLocation: "",
 };
 
 const initialSessionState: SessionState = {
   uids: [],
   fixtures: [],
+  fixtureDefinitions: [],
   cues: [],
   groups: [],
   directMappings: [],
   layouts: [],
   activeView: View.HOME,
-  settings: initalSessionSettings,
+  sessionSettings: initalSessionSettings,
+  persistentSettings: initialPersistentSettings,
 };
 
 type SessionStore = SessionState & {
@@ -31,9 +43,11 @@ function compileOnUpdate(
   newState: SessionState
 ) {
   //TODO: Check need for reduced updates
+  /*
   if (ipcRenderer) {
     ipcRenderer.send(IpcMessageType.SessionStateChange, newState);
   }
+  */
 }
 
 export const useSessionStore = create<SessionStore>((set) => ({

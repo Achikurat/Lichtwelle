@@ -7,6 +7,8 @@ import {
   Group,
   Layout,
   SessionSettings,
+  PersistentSettings,
+  FixtureDefinition,
 } from "./app";
 import { EngineState } from "./engine";
 
@@ -20,4 +22,6 @@ export type {
   Group,
   Cue,
   Layout,
+  PersistentSettings,
+  FixtureDefinition
 };

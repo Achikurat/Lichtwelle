@@ -9,21 +9,27 @@ import {
 export type SessionState = {
   uids: Uid[];
   fixtures: Fixture[];
+  fixtureDefinitions: FixtureDefinition[];
   groups: Group[];
   cues: Cue[];
   layouts: Layout[];
   directMappings: undefined[];
   activeView: View;
-  settings: SessionSettings;
+  sessionSettings: SessionSettings;
+  persistentSettings: PersistentSettings;
 };
 
 export type SessionSettings = {
   maxStep: number;
   bpm: number;
+};
+
+export type PersistentSettings = {
   stepCompileResoultion: number;
   interpolate: boolean;
   dmxRefreshRate: number;
-};
+  fixtureDefinitionsLocation: string;
+}
 
 export type Uid = {
   type: UidType;
@@ -73,6 +79,11 @@ export type Fixture = {
   name: string;
   universe: string;
   address: number;
+  definition: FixtureDefinition;
+};
+
+export type FixtureDefinition = {
+  name: string;
   channels: (Channel | Channel[])[];
   src: string;
 };
