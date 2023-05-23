@@ -25,20 +25,30 @@ export async function parseFixtureJSON(
       });
       if (coarseChannel.fineChannels !== undefined) {
         linkedChannels.push({
-          name: coarseChannel.name + "Fine",
+          name: coarseChannel.name + " Fine",
           defaultValue: coarseChannel.defaultValue,
           capabilities: capabilities,
+          isFine: true,
         });
       }
 
       return linkedChannels;
     }
   );
-  const keyedChannels = Object.fromEntries(channels.map((ch) => [ch.name, ch]));
+
+  const modes = fixture.modes.map((mode) => {
+    return [mode.name, mode.channelKeys];
+  });
+
+  const keyedModes = Object.fromEntries(modes);
+  const keyedChannels = Object.fromEntries(
+    channels.map((ch) => [ch.name.toString(), ch])
+  );
 
   return {
     name: fixture.name,
     channels: keyedChannels,
+    modes: keyedModes,
     src: path,
   };
 }

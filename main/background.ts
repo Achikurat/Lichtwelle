@@ -48,11 +48,6 @@ app.on("window-all-closed", () => {
 ipcMain.handle(
   IpcMessageType.ReloadFixtureDefinitions,
   async (event, ...args) => {
-    console.log("1234");
-
-    console.log(await handleReloadFixtureDefinitions(args[0] as string));
-    console.log("4321");
-
     return await handleReloadFixtureDefinitions(args[0] as string);
   }
 );

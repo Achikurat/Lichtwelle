@@ -1,4 +1,5 @@
 import {
+  Code,
   Collapse,
   Divider,
   FormControl,
@@ -14,8 +15,9 @@ import {
   Select,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { FixtureDefinition } from "../../../../lib/types/app";
+import { useSessionStore } from "../../../common/store/sessionStore";
 
 type Props = {
   isOpen: boolean;
@@ -23,8 +25,35 @@ type Props = {
 };
 
 export default function AddFixtureModal({ isOpen, onClose }: Props) {
-  const { isOpen: isChannelOpen, onToggle: onChannelToggle } = useDisclosure();
-  const [fixtureDefintion, setFixtureDefintion] = useState<FixtureDefinition>();
+  const fixtureDefinitions = useSessionStore(
+    (state) => state.fixtureDefinitions
+  );
+
+  const [selectedFixtureDefintion, setSelectedFixtureDefinition] =
+    useState<FixtureDefinition>();
+  const [selectedFixtureMode, setSelectedFixtureMode] = useState<string>();
+
+  const fixtureDefinitionOptions = useMemo(() => {
+    return fixtureDefinitions.map((fixtureDefinition, idx) => {
+      return (
+        <option key={idx} value={idx}>
+          {fixtureDefinition.name}
+        </option>
+      );
+    });
+  }, []);
+
+  const fixtureModeOptions = useMemo(() => {
+    if (selectedFixtureDefintion !== undefined) {
+      return Object.keys(selectedFixtureDefintion.modes).map((mode, idx) => {
+        return (
+          <option key={idx} value={mode}>
+            {mode}
+          </option>
+        );
+      });
+    }
+  }, [selectedFixtureDefintion]);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -35,16 +64,41 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
         <ModalBody>
           <FormControl>
             <FormLabel>Fixture Definition</FormLabel>
-            <Select onChange={(e) => console.log(e.target.value)}>
-              <option>Fixture #1</option>
-              <option>Fixture #2</option>
-              <option>Fixture #3</option>
-              <option>Fixture #4</option>
-              <option>Fixture #5</option>
+            <Select
+              onChange={(e) => {
+                if (e.target.value !== "-1") {
+                  setSelectedFixtureDefinition(
+                    fixtureDefinitions[e.target.value]
+                  );
+                } else setSelectedFixtureDefinition(undefined);
+              }}
+            >
+              <option value={-1}>Select a Fixture.</option>
+              {fixtureDefinitionOptions}
             </Select>
-            <FormHelperText>Select a fixture definition.</FormHelperText>
             <Divider />
-            <Collapse in={isChannelOpen}></Collapse>
+            <FormHelperText>Select a fixture definition.</FormHelperText>
+            {selectedFixtureDefintion && (
+              <>
+                <FormLabel>Fixture Mode</FormLabel>
+                <Select
+                  onChange={(e) => {
+                    if (e.target.value !== "-1") {
+                      setSelectedFixtureMode(e.target.value);
+                    } else setSelectedFixtureMode(undefined);
+                  }}
+                >
+                  <option value={-1}>Select a Mode.</option>
+                  {fixtureModeOptions}
+                </Select>
+              </>
+            )}
+            <Divider />
+            {selectedFixtureMode && (
+              <>
+                <FormLabel>Address Options</FormLabel>
+              </>
+            )}
           </FormControl>
         </ModalBody>
         <ModalFooter>asdasdasd</ModalFooter>

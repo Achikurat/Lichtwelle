@@ -43,6 +43,7 @@ export type Capability = {
 export type Channel = {
   name: string;
   capabilities: Capability[];
+  isFine?: boolean;
   defaultValue?: number;
 };
 
@@ -84,6 +85,7 @@ export type FixtureDefinition = {
   name: string;
   channels: { [key: string]: Channel };
   src: string;
+  modes: { [key: string]: string[] };
 };
 
 export type Group = {
