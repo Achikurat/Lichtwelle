@@ -1,5 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
-import { Button } from "./components";
+import { Button, Divider, FormLabel, Input } from "./components";
+import { modalTheme } from "./multiComponents/modal";
+import { menuTheme } from "./multiComponents/menu";
 
 const theme = extendTheme({
   semanticTokens: {
@@ -19,6 +21,11 @@ const theme = extendTheme({
   },
   components: {
     Button,
+    Modal: modalTheme,
+    Input,
+    FormLabel,
+    Menu: menuTheme,
+    Divider,
   },
 });
 

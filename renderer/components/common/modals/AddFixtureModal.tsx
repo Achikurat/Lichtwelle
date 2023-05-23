@@ -1,10 +1,15 @@
 import {
+  Button,
   Code,
   Collapse,
   Divider,
   FormControl,
   FormHelperText,
   FormLabel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -36,20 +41,26 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   const fixtureDefinitionOptions = useMemo(() => {
     return fixtureDefinitions.map((fixtureDefinition, idx) => {
       return (
-        <option key={idx} value={idx}>
+        <MenuItem
+          key={idx}
+          onClick={() => {
+            setSelectedFixtureDefinition(fixtureDefinition);
+            setSelectedFixtureMode(undefined);
+          }}
+        >
           {fixtureDefinition.name}
-        </option>
+        </MenuItem>
       );
     });
-  }, []);
+  }, [fixtureDefinitions]);
 
   const fixtureModeOptions = useMemo(() => {
     if (selectedFixtureDefintion !== undefined) {
       return Object.keys(selectedFixtureDefintion.modes).map((mode, idx) => {
         return (
-          <option key={idx} value={mode}>
+          <MenuItem key={idx} onClick={() => setSelectedFixtureMode(mode)}>
             {mode}
-          </option>
+          </MenuItem>
         );
       });
     }
@@ -63,37 +74,33 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
         <ModalCloseButton />
         <ModalBody>
           <FormControl>
-            <FormLabel>Fixture Definition</FormLabel>
-            <Select
-              onChange={(e) => {
-                if (e.target.value !== "-1") {
-                  setSelectedFixtureDefinition(
-                    fixtureDefinitions[e.target.value]
-                  );
-                } else setSelectedFixtureDefinition(undefined);
-              }}
-            >
-              <option value={-1}>Select a Fixture.</option>
-              {fixtureDefinitionOptions}
-            </Select>
-            <Divider />
-            <FormHelperText>Select a fixture definition.</FormHelperText>
+            <Menu>
+              <MenuButton as={Button} w="100%">
+                {selectedFixtureDefintion
+                  ? "Fixture - " + selectedFixtureDefintion.name
+                  : "Select a Fixture."}
+              </MenuButton>
+              <MenuList>{fixtureDefinitionOptions}</MenuList>
+            </Menu>
             {selectedFixtureDefintion && (
               <>
-                <FormLabel>Fixture Mode</FormLabel>
-                <Select
-                  onChange={(e) => {
-                    if (e.target.value !== "-1") {
-                      setSelectedFixtureMode(e.target.value);
-                    } else setSelectedFixtureMode(undefined);
-                  }}
-                >
-                  <option value={-1}>Select a Mode.</option>
-                  {fixtureModeOptions}
-                </Select>
+                <br />
+                <br />
+                <Menu>
+                  <MenuButton as={Button} w="100%">
+                    {selectedFixtureMode
+                      ? "Mode - " + selectedFixtureMode
+                      : "Select a Mode."}
+                  </MenuButton>
+                  <MenuList>{fixtureModeOptions}</MenuList>
+                </Menu>
               </>
             )}
+
+            <br />
+            <br />
             <Divider />
+            <br />
             {selectedFixtureMode && (
               <>
                 <FormLabel>Address Options</FormLabel>
