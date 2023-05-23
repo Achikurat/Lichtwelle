@@ -20,12 +20,6 @@ export const FormLabel = defineStyleConfig({
   },
 });
 
-export const Input = defineStyleConfig({
-  baseStyle: {
-    borderColor: "primary",
-  },
-});
-
 export const Divider = defineStyleConfig({
   baseStyle: {
     borderColor: "primary",

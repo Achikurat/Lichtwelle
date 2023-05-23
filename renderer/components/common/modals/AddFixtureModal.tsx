@@ -23,6 +23,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { FixtureDefinition } from "../../../../lib/types/app";
 import { useSessionStore } from "../../../common/store/sessionStore";
+import AutoCompleteInput from "../AutoCompleteInput";
 
 type Props = {
   isOpen: boolean;
@@ -37,6 +38,10 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   const [selectedFixtureDefintion, setSelectedFixtureDefinition] =
     useState<FixtureDefinition>();
   const [selectedFixtureMode, setSelectedFixtureMode] = useState<string>();
+
+  const values: string[] = fixtureDefinitions.map(
+    (fx: FixtureDefinition): string => fx.name.toLocaleLowerCase()
+  );
 
   const fixtureDefinitionOptions = useMemo(() => {
     return fixtureDefinitions.map((fixtureDefinition, idx) => {
@@ -73,15 +78,15 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
         <ModalHeader>Add Fixture</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl>
-            <Menu>
-              <MenuButton as={Button} w="100%">
-                {selectedFixtureDefintion
-                  ? "Fixture - " + selectedFixtureDefintion.name
-                  : "Select a Fixture."}
-              </MenuButton>
-              <MenuList>{fixtureDefinitionOptions}</MenuList>
-            </Menu>
+          <FormControl spellCheck="false">
+            <AutoCompleteInput
+              w="100% !important"
+              entries={values}
+              onSelectEntry={(idx: number) => {
+                setSelectedFixtureDefinition(fixtureDefinitions[idx]);
+                setSelectedFixtureMode(undefined);
+              }}
+            />
             {selectedFixtureDefintion && (
               <>
                 <br />

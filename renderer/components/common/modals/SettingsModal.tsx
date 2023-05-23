@@ -74,7 +74,7 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
         <ModalHeader>Application Settings</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl>
+          <FormControl spellCheck="false">
             <FormLabel>Fixture Definition Location</FormLabel>
             <HStack height="55px">
               <Input

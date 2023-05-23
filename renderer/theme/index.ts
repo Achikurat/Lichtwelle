@@ -1,8 +1,9 @@
 import { extendTheme } from "@chakra-ui/react";
-import { Button, Divider, FormLabel, Input } from "./components";
+import { Button, Divider, FormLabel } from "./components";
 import { modalTheme } from "./multiComponents/modal";
 import { menuTheme } from "./multiComponents/menu";
-import { MiddlewareNotFoundError } from "next/dist/shared/lib/utils";
+import { popoverTheme } from "./multiComponents/popover";
+import { inputTheme } from "./multiComponents/input";
 
 const theme = extendTheme({
   semanticTokens: {
@@ -32,9 +33,10 @@ const theme = extendTheme({
   components: {
     Button,
     Modal: modalTheme,
-    Input,
+    Input: inputTheme,
     FormLabel,
     Menu: menuTheme,
+    Popover: popoverTheme,
     Divider,
   },
 });
