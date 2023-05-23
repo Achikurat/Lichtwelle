@@ -21,17 +21,17 @@ export default function CardGrid({ children, cardAddAction }: Props) {
         onClick={cardAddAction}
         background="transparent"
         border="2px dashed"
-        borderColor="background"
-        color="background"
+        borderColor="bg.dark"
+        color="bg.dark"
         w="300px"
         h="150px"
         _hover={{
-          borderColor: "accent",
-          color: "accent",
+          borderColor: "primary",
+          color: "primary",
         }}
         _active={{
-          color: "darkBackground",
-          backgroundColor: "accent !important",
+          color: "bg.dark",
+          backgroundColor: "primary !important",
         }}
       >
         <BsPlusLg size="30px" />

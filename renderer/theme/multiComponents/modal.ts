@@ -6,22 +6,22 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const baseStyle = definePartsStyle({
   dialog: {
-    bg: "background", //change the background
+    bg: "bg.dark",
     color: "text",
   },
   header: {
-    color: "accent",
+    color: "primary",
   },
   closeButton: {
     borderRadius: "md",
     padding: "3",
-    backgroundColor: "darkBackground !important",
-    color: "accent",
+    backgroundColor: "bg.mid !important",
+    color: "primary",
     fontSize: "md",
     boxSizing: "border-box !important",
     border: "3px solid transparent",
-    _active: { color: "darkBackground", backgroundColor: "accent !important" },
-    _hover: { borderTopColor: "accent" },
+    _active: { color: "bg.dark", backgroundColor: "primary !important" },
+    _hover: { color: "secondary" },
   },
 });
 

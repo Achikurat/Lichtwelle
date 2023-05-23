@@ -18,7 +18,7 @@
     "dmx": "^0.2.5",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
-    "framer-motion": "^10.12.8",
+    "framer-motion": "^10.12.14",
     "midi": "^2.0.0",
     "react-icons": "^4.8.0",
     "uuidv4": "^6.2.13",

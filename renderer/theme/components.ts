@@ -4,13 +4,13 @@ export const Button = defineStyleConfig({
   baseStyle: {
     borderRadius: "md",
     padding: "6",
-    backgroundColor: "darkBackground !important",
-    color: "accent",
+    backgroundColor: "bg.mid !important",
+    color: "primary",
     fontSize: "md",
     boxSizing: "border-box !important",
     border: "3px solid transparent",
-    _active: { color: "darkBackground", backgroundColor: "accent !important" },
-    _hover: { borderTopColor: "accent" },
+    _active: { color: "bg.dark", backgroundColor: "primary !important" },
+    _hover: { color: "secondary" },
   },
 });
 
@@ -22,12 +22,12 @@ export const FormLabel = defineStyleConfig({
 
 export const Input = defineStyleConfig({
   baseStyle: {
-    borderColor: "accent",
+    borderColor: "primary",
   },
 });
 
 export const Divider = defineStyleConfig({
   baseStyle: {
-    borderColor: "accent",
+    borderColor: "primary",
   },
 });

@@ -15,8 +15,8 @@ import { BsSave, BsFolder2Open, BsFilePlus } from "react-icons/bs";
 function Home() {
   return (
     <Center w="100%" h="100%">
-      <Card background="background">
-        <CardHeader color="accent">Home</CardHeader>
+      <Card background="bg.dark">
+        <CardHeader color="primary">Home</CardHeader>
         <Divider />
         <CardBody color="text">
           <VStack>

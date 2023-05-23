@@ -82,11 +82,10 @@ export default function Layout({ children }: Props) {
         </HStack>
         <Box
           flexGrow="1"
-          background="darkBackground"
+          background="bg.mid"
           w="100%"
           h="100%"
           borderRadius="md"
-          boxShadow="inner"
         >
           {children}
         </Box>
