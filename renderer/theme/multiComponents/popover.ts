@@ -4,12 +4,13 @@ const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(parts.keys);
 const baseStyle = definePartsStyle({
   body: {
-    bg: "bg.dark",
+    bg: "bg.mid",
     p: "6",
     borderColor: "bg.mid !important",
   },
   content: {
     bg: "bg.mid !imporant",
+    boxShadow: "xl",
     scrollbars: "none",
   },
   popper: { color: "bg.mid", border: "none !important" },

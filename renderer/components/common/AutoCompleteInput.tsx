@@ -36,7 +36,7 @@ export default function AutoCompleteInput({
     if (localInput === "") {
       return true;
     }
-    return entry.includes(localInput, 0);
+    return entry.toLocaleLowerCase().includes(localInput, 0);
   });
 
   const autocompleteOptions = useMemo(() => {
@@ -69,7 +69,7 @@ export default function AutoCompleteInput({
       <Popover
         isLazy={true}
         autoFocus={false}
-        isOpen={isVisible}
+        isOpen={filteredEntries.length > 0 && isVisible}
         onClose={() => setVisible(false)}
         placement="bottom"
         closeOnBlur={true}
@@ -80,7 +80,7 @@ export default function AutoCompleteInput({
             {...chakraProps}
             value={localInput}
             variant="custom"
-            placeholder="Search for fixtures..."
+            onClick={() => setVisible(true)}
             onChange={(e) => {
               setLocalInput(e.target.value.toLowerCase());
               setFocusIndex(-1);
@@ -103,7 +103,12 @@ export default function AutoCompleteInput({
                 }
               }
 
+              if (e.key === "Backspace") {
+                onSelectEntry(-1);
+              }
+
               if (e.key === "ArrowUp") {
+                e.preventDefault();
                 if (focusIndex > 0) {
                   setFocusIndex(focusIndex - 1);
                 } else {
@@ -112,6 +117,7 @@ export default function AutoCompleteInput({
               }
 
               if (e.key === "ArrowDown") {
+                e.preventDefault();
                 if (focusIndex < filteredEntries.length - 1) {
                   setFocusIndex(focusIndex + 1);
                 } else {
@@ -122,8 +128,8 @@ export default function AutoCompleteInput({
           />
         </PopoverTrigger>
         <PopoverContent
-          w="400px"
-          maxH="300px"
+          w="625px"
+          maxH="350px"
           overflowY="scroll"
           css={{
             "&::-webkit-scrollbar": {

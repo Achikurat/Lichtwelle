@@ -83,6 +83,7 @@ export type Fixture = {
 
 export type FixtureDefinition = {
   name: string;
+  manufacturer: string;
   channels: { [key: string]: Channel };
   src: string;
   modes: { [key: string]: string[] };

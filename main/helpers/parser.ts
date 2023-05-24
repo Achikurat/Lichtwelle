@@ -47,6 +47,7 @@ export async function parseFixtureJSON(
 
   return {
     name: fixture.name,
+    manufacturer: fixture.jsonObject.manufacturerKey,
     channels: keyedChannels,
     modes: keyedModes,
     src: path,

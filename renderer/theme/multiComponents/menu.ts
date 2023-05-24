@@ -11,16 +11,16 @@ const baseStyle = definePartsStyle({
     borderRadius: "md",
     border: "none",
     bg: "bg.mid",
-    width: "400px !important",
     mx: "auto !important",
   },
   item: {
     bg: "bg.mid",
     color: "text",
     _hover: {
-      color: "primary",
+      color: "secondary",
     },
-    _focus: {
+    _active: {
+      bg: "bg.mid",
       color: "primary",
     },
   },

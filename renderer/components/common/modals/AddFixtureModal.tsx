@@ -34,25 +34,15 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
     useState<FixtureDefinition>();
   const [selectedFixtureMode, setSelectedFixtureMode] = useState<string>();
 
-  const values: string[] = fixtureDefinitions.map(
-    (fx: FixtureDefinition): string => fx.name.toLocaleLowerCase()
+  const fixtureDefinitionsEntires: string[] = fixtureDefinitions.map(
+    (fx: FixtureDefinition): string => fx.manufacturer + "/" + fx.name
   );
 
-  const fixtureDefinitionOptions = useMemo(() => {
-    return fixtureDefinitions.map((fixtureDefinition, idx) => {
-      return (
-        <MenuItem
-          key={idx}
-          onClick={() => {
-            setSelectedFixtureDefinition(fixtureDefinition);
-            setSelectedFixtureMode(undefined);
-          }}
-        >
-          {fixtureDefinition.name}
-        </MenuItem>
-      );
-    });
-  }, [fixtureDefinitions]);
+  const fixtureModeEntries: string[] = useMemo(() => {
+    if (selectedFixtureDefintion !== undefined) {
+      return Object.keys(selectedFixtureDefintion.modes);
+    }
+  }, [selectedFixtureDefintion]);
 
   const fixtureModeOptions = useMemo(() => {
     if (selectedFixtureDefintion !== undefined) {
@@ -75,10 +65,15 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
         <ModalBody>
           <FormControl spellCheck="false">
             <AutoCompleteInput
+              placeholder="Search for fixtures..."
               w="100% !important"
-              entries={values}
+              entries={fixtureDefinitionsEntires}
               onSelectEntry={(idx: number) => {
-                setSelectedFixtureDefinition(fixtureDefinitions[idx]);
+                if (idx === -1) {
+                  setSelectedFixtureDefinition(undefined);
+                } else {
+                  setSelectedFixtureDefinition(fixtureDefinitions[idx]);
+                }
                 setSelectedFixtureMode(undefined);
               }}
             />
@@ -86,14 +81,16 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
               <>
                 <br />
                 <br />
-                <Menu>
-                  <MenuButton as={Button} w="100%">
-                    {selectedFixtureMode
-                      ? "Mode - " + selectedFixtureMode
-                      : "Select a Mode."}
-                  </MenuButton>
-                  <MenuList>{fixtureModeOptions}</MenuList>
-                </Menu>
+                <AutoCompleteInput
+                  placeholder="Search for modes..."
+                  w="100% !important"
+                  entries={fixtureModeEntries}
+                  onSelectEntry={(idx: number) => {
+                    if (idx !== -1) {
+                      setSelectedFixtureMode(fixtureModeEntries[idx]);
+                    }
+                  }}
+                />
               </>
             )}
 
@@ -108,7 +105,9 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
             )}
           </FormControl>
         </ModalBody>
-        <ModalFooter>asdasdasd</ModalFooter>
+        <ModalFooter>
+          <Button w="100%">Create</Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

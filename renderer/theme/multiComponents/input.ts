@@ -9,6 +9,11 @@ const baseStyle = definePartsStyle({
     p: "6",
     bg: "bg.mid",
     color: "text",
+    outline: "none !important",
+    _focus: {
+      outline: "1px solid !important",
+      outlineColor: "primary !important",
+    },
   },
 });
 
