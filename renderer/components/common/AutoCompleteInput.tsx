@@ -1,5 +1,4 @@
 import {
-  Text,
   Input,
   InputProps,
   Popover,
@@ -8,7 +7,6 @@ import {
   PopoverTrigger,
   VStack,
   Button,
-  PopoverArrow,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
@@ -88,6 +86,9 @@ export default function AutoCompleteInput({
               if (!isVisible) {
                 setVisible(true);
               }
+            }}
+            onFocus={() => {
+              setVisible(true);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {

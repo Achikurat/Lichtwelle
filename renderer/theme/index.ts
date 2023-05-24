@@ -4,6 +4,7 @@ import { modalTheme } from "./multiComponents/modal";
 import { menuTheme } from "./multiComponents/menu";
 import { popoverTheme } from "./multiComponents/popover";
 import { inputTheme } from "./multiComponents/input";
+import { tagTheme } from "./multiComponents/tag";
 
 const theme = extendTheme({
   fonts: {
@@ -26,6 +27,9 @@ const theme = extendTheme({
         warn: "#FFD300",
         error: "#F54436",
       },
+      tag: {
+        purple: "#553E57",
+      },
     },
   },
   styles: {
@@ -42,6 +46,7 @@ const theme = extendTheme({
     FormLabel,
     Menu: menuTheme,
     Popover: popoverTheme,
+    Tag: tagTheme,
     Divider,
   },
 });

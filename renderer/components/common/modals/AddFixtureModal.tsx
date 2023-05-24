@@ -2,11 +2,8 @@ import {
   Button,
   Divider,
   FormControl,
-  FormLabel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,6 +11,15 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Table,
+  TableContainer,
+  Tag,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import { FixtureDefinition } from "../../../../lib/types/app";
@@ -41,18 +47,6 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   const fixtureModeEntries: string[] = useMemo(() => {
     if (selectedFixtureDefintion !== undefined) {
       return Object.keys(selectedFixtureDefintion.modes);
-    }
-  }, [selectedFixtureDefintion]);
-
-  const fixtureModeOptions = useMemo(() => {
-    if (selectedFixtureDefintion !== undefined) {
-      return Object.keys(selectedFixtureDefintion.modes).map((mode, idx) => {
-        return (
-          <MenuItem key={idx} onClick={() => setSelectedFixtureMode(mode)}>
-            {mode}
-          </MenuItem>
-        );
-      });
     }
   }, [selectedFixtureDefintion]);
 
@@ -100,7 +94,37 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
             <br />
             {selectedFixtureMode && (
               <>
-                <FormLabel>Address Options</FormLabel>
+                <HStack alignContent="flex-start">
+                  <Text>Address Options</Text>
+                  <Tag>
+                    {selectedFixtureDefintion.modes[selectedFixtureMode].length}{" "}
+                    Channels
+                  </Tag>
+                </HStack>
+                <br />
+                <HStack gap="50px">
+                  <Input
+                    type="number"
+                    variant="custom"
+                    placeholder="Start address"
+                    min={0}
+                    max={255}
+                  />
+                  <Input
+                    type="number"
+                    variant="custom"
+                    placeholder="Address Gap"
+                    min={0}
+                    max={255}
+                  />
+                  <Input
+                    type="number"
+                    variant="custom"
+                    placeholder="Fixture count"
+                    min={0}
+                    max={255}
+                  />
+                </HStack>
               </>
             )}
           </FormControl>

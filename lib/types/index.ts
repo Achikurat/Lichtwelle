@@ -9,6 +9,7 @@ import {
   SessionSettings,
   PersistentSettings,
   FixtureDefinition,
+  Addressing,
 } from "./app";
 import { EngineState } from "./engine";
 
@@ -23,5 +24,6 @@ export type {
   Cue,
   Layout,
   PersistentSettings,
-  FixtureDefinition
+  FixtureDefinition,
+  Addressing,
 };

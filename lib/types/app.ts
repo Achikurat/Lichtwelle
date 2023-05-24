@@ -76,8 +76,7 @@ export type Mapping = {
 export type Fixture = {
   uid: Uid;
   name: string;
-  universe: string;
-  address: number;
+  addressing: Addressing;
   definition: FixtureDefinition;
 };
 
@@ -87,6 +86,14 @@ export type FixtureDefinition = {
   channels: { [key: string]: Channel };
   src: string;
   modes: { [key: string]: string[] };
+};
+
+export type Addressing = {
+  fixtureUid: Uid;
+  universe: string;
+  firstChannel: number;
+  lastChannel: number;
+  intersectiong: Addressing[];
 };
 
 export type Group = {
