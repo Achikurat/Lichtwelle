@@ -1,10 +1,7 @@
 import {
   Button,
-  Code,
-  Collapse,
   Divider,
   FormControl,
-  FormHelperText,
   FormLabel,
   Menu,
   MenuButton,
@@ -17,8 +14,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import { FixtureDefinition } from "../../../../lib/types/app";
@@ -72,7 +67,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   }, [selectedFixtureDefintion]);
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay backdropBlur="2px" />
       <ModalContent>
         <ModalHeader>Add Fixture</ModalHeader>

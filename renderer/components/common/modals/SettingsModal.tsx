@@ -68,7 +68,7 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
   }
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay backdropBlur="2px" />
       <ModalContent>
         <ModalHeader>Application Settings</ModalHeader>
