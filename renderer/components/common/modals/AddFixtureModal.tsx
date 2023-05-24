@@ -25,6 +25,7 @@ import React, { useMemo, useState } from "react";
 import { FixtureDefinition } from "../../../../lib/types/app";
 import { useSessionStore } from "../../../common/store/sessionStore";
 import AutoCompleteInput from "../AutoCompleteInput";
+import AddressingMatrix from "../AddressingMatrix";
 
 type Props = {
   isOpen: boolean;
@@ -125,6 +126,14 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                     max={255}
                   />
                 </HStack>
+                <AddressingMatrix
+                  addressings={[]}
+                  onEdit={() => {}}
+                  matrixSize={[625, 600]}
+                  initMatrixZoom={0.7}
+                  w="625px"
+                  h="400px"
+                />
               </>
             )}
           </FormControl>

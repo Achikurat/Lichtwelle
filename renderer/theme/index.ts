@@ -8,7 +8,7 @@ import { tagTheme } from "./multiComponents/tag";
 
 const theme = extendTheme({
   fonts: {
-    heading: "Gambetta, serif",
+    heading: "GeneralSans, sans-serif",
     body: "GeneralSans, sans-serif",
     mono: "Menlo, monospace",
   },
