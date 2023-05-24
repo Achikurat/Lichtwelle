@@ -13,6 +13,9 @@ const baseStyle = definePartsStyle({
     boxShadow: "xl",
     scrollbars: "none",
   },
+  arrow: {
+    color: "primary",
+  },
   popper: { color: "bg.mid", border: "none !important" },
 });
 export const popoverTheme = defineMultiStyleConfig({ baseStyle });

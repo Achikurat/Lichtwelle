@@ -6,6 +6,11 @@ import { popoverTheme } from "./multiComponents/popover";
 import { inputTheme } from "./multiComponents/input";
 
 const theme = extendTheme({
+  fonts: {
+    heading: "Gambetta, serif",
+    body: "GeneralSans, sans-serif",
+    mono: "Menlo, monospace",
+  },
   semanticTokens: {
     colors: {
       primary: "#DE8449",

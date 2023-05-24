@@ -4,8 +4,7 @@ import { createWindow } from "./helpers";
 import { IpcMessageType } from "../lib/enums";
 import Store from "electron-store";
 import { handleReloadFixtureDefinitions } from "./helpers/handleIPC";
-import { PersistentSettings } from "../lib/types";
-import { StyleKeyframesDefinition } from "framer-motion";
+import path from "path";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -20,9 +19,23 @@ if (isProd) {
 
   Store.initRenderer();
 
+  const loadinScreen = createWindow("load", {
+    width: 600,
+    height: 400,
+    roundedCorners: false,
+    autoHideMenuBar: true,
+    frame: false,
+  });
+  loadinScreen.center();
+
+  loadinScreen.loadFile(
+    path.join(__dirname, "../main/helpers/loadingScreen.html")
+  );
+
   const mainWindow = createWindow("main", {
-    width: 1600,
-    height: 900,
+    width: 600,
+    height: 400,
+    show: false,
     autoHideMenuBar: true,
   });
 
@@ -33,6 +46,12 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}/home`);
     mainWindow.webContents.openDevTools();
   }
+
+  loadinScreen.hide();
+
+  mainWindow.center();
+  mainWindow.maximize();
+  mainWindow.show();
 
   ipcMain.handle(IpcMessageType.OpenDirectoryPrompt, async (event, ...args) => {
     return await dialog.showOpenDialog(mainWindow, {
