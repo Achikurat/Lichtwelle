@@ -15,10 +15,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
-import { FixtureDefinition } from "../../../../lib/types/app";
+import { Addressing, FixtureDefinition } from "../../../../lib/types/app";
 import { useSessionStore } from "../../../common/store/sessionStore";
 import AutoCompleteInput from "../AutoCompleteInput";
-import AddressingMatrix from "../AddressingMatrix";
+import AddressingEdit from "../AddressingEdit";
 
 type Props = {
   isOpen: boolean;
@@ -33,6 +33,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   const [selectedFixtureDefintion, setSelectedFixtureDefinition] =
     useState<FixtureDefinition>();
   const [selectedFixtureMode, setSelectedFixtureMode] = useState<string>();
+  const [localAddressings, setLocalAddressings] = useState<Addressing[]>([]);
 
   const fixtureDefinitionsEntires: string[] = fixtureDefinitions.map(
     (fx: FixtureDefinition): string => fx.manufacturer + "/" + fx.name
@@ -107,7 +108,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                   <Input
                     type="number"
                     variant="custom"
-                    placeholder="Address Gap"
+                    placeholder="Offset"
                     min={0}
                     max={255}
                   />
@@ -121,12 +122,13 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                   <Button w="300px">Auto Map</Button>
                 </HStack>
                 <br />
-                <br />
-                <AddressingMatrix
-                  addressings={[]}
-                  onEdit={() => {}}
-                  w="625px"
-                  h="400px"
+                <AddressingEdit
+                  addressings={localAddressings}
+                  onEdit={(newAddressing) => {
+                    setLocalAddressings(newAddressing);
+                  }}
+                  width="625px"
+                  height="400px"
                 />
               </>
             )}

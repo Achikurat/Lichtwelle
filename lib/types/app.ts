@@ -89,7 +89,6 @@ export type FixtureDefinition = {
 };
 
 export type Addressing = {
-  fixtureUid: Uid;
   universe: string;
   firstChannel: number;
   lastChannel: number;
