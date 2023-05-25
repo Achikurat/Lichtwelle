@@ -11,15 +11,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Table,
-  TableContainer,
   Tag,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import { FixtureDefinition } from "../../../../lib/types/app";
@@ -129,8 +122,6 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                 <AddressingMatrix
                   addressings={[]}
                   onEdit={() => {}}
-                  matrixSize={[625, 600]}
-                  initMatrixZoom={0.7}
                   w="625px"
                   h="400px"
                 />

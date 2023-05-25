@@ -93,7 +93,7 @@ export type Addressing = {
   universe: string;
   firstChannel: number;
   lastChannel: number;
-  intersectiong: Addressing[];
+  intersections: Addressing[];
 };
 
 export type Group = {

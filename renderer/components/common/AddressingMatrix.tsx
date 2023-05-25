@@ -1,141 +1,131 @@
-import { Box, BoxProps } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  HStack,
+  RangeSlider,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  RangeSliderTrack,
+  Tag,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { Addressing } from "../../../lib/types";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { UidType } from "../../../lib/enums";
 
 type Props = {
   addressings: Addressing[];
   editable?: boolean;
-  matrixSize: [number, number];
-  initMatrixZoom: number;
   onEdit: (addressings: Addressing[]) => void;
 } & BoxProps;
 
 export default function AddressingMatrix({
   addressings,
   editable,
-  matrixSize,
-  initMatrixZoom,
   onEdit,
   ...chakraProps
 }: Props) {
-  const [viewboxPosition, setViewboxPosition] = useState<[number, number]>([
-    0, 0,
-  ]);
-  const [isMiddleMouseDown, setIsMiddleMouseDown] = useState<boolean>();
-  const [matrixZoom, setMatrixZoom] = useState<number>(initMatrixZoom);
+  const propAddressings: Addressing[] = [];
 
-  const canvasSize = [256 * 25, 500];
-
-  const channelRuler = [];
-  for (let i = 0; i < 256; i++) {
-    channelRuler.push(
-      <>
-        <text
-          x={i * 25}
-          y={viewboxPosition[1] + 10}
-          fontSize={8}
-          fontFamily="Menlo, monospace"
-          stroke="#DE8449"
-        >
-          {i}
-        </text>
-        <line
-          x1={i * 25 + 20}
-          y1={0}
-          x2={i * 25 + 20}
-          y2={canvasSize[1]}
-          stroke="#2b2a33"
-          strokeWidth={1}
-        />
-      </>
-    );
+  for (var i = 0; i < 20; i++) {
+    propAddressings.push(createPropAddressing());
   }
 
-  const fixtureRuler = [];
-  for (let i = 0; i < 30; i++) {
-    channelRuler.push(
-      <>
-        <text
-          x={viewboxPosition[0] + 5}
-          y={i * 25}
-          fontSize={8}
-          fontFamily="Menlo, monospace"
-          stroke="#DE8449"
+  const fixtureTags = useMemo(() => {
+    return propAddressings.map((addressing, idx) => {
+      return (
+        <Tag key={idx} h="25px !important" bg="tag.purple">
+          {"#" + addressing.fixtureUid.type + addressing.fixtureUid.key}
+        </Tag>
+      );
+    });
+  }, []);
+
+  const fixtureRanges = useMemo(() => {
+    return propAddressings.map((addressings, idx) => {
+      return (
+        <RangeSlider
+          key={idx}
+          min={0}
+          max={255}
+          h="25px !important"
+          w="800px"
+          aria-label={["min", "max"]}
+          defaultValue={[addressings.firstChannel, addressings.lastChannel]}
         >
-          {i}
-        </text>
-        <line
-          x1={0}
-          y1={i * 25 + 20}
-          x2={canvasSize[0]}
-          y2={i * 25 + 20}
-          stroke="#2b2a33"
-          strokeWidth={1}
-        />
-      </>
-    );
-  }
-
-  const viewboxSize = [matrixSize[0] * matrixZoom, matrixSize[1] * matrixZoom];
-  const maxViewboxPosition = [
-    canvasSize[0] - viewboxSize[0],
-    canvasSize[1] - viewboxSize[1],
-  ] as [number, number];
-
-  const onMouseMovement = useCallback(
-    (e: MouseEvent) => {
-      if (isMiddleMouseDown) {
-        const newPosition = [
-          viewboxPosition[0] - e.movementX * 2 * matrixZoom,
-          viewboxPosition[1] - e.movementY * 2 * matrixZoom,
-        ] as [number, number];
-        setViewboxPosition(
-          constraintToViewbox(newPosition, maxViewboxPosition)
-        );
-      }
-    },
-    [isMiddleMouseDown, viewboxPosition, setViewboxPosition, matrixZoom]
-  );
+          <RangeSliderTrack h="23px" bg="bg.mid">
+            <Box
+              w="100%"
+              h="23px"
+              bg="bg.mid"
+              border="1px solid"
+              borderColor="bg.dark"
+            />
+            <RangeSliderFilledTrack bg="bg.dark" h="100%" color="primary">
+              <HStack px="3" w="100%" h="100%" justifyContent="space-between">
+                <Text>{addressings.firstChannel}</Text>
+                <Text textAlign="right">{addressings.lastChannel}</Text>
+              </HStack>
+            </RangeSliderFilledTrack>
+          </RangeSliderTrack>
+          <RangeSliderThumb
+            h="23px"
+            w="5px"
+            index={0}
+            color="primary"
+            bg="bg.dark"
+            borderRadius="sm"
+            boxShadow="none"
+          ></RangeSliderThumb>
+          <RangeSliderThumb
+            h="23px"
+            w="5px"
+            index={1}
+            color="primary"
+            bg="bg.dark"
+            borderRadius="sm"
+            boxShadow="none"
+          ></RangeSliderThumb>
+        </RangeSlider>
+      );
+    });
+  }, []);
 
   return (
     <Box
       p="6"
       bg="bg.mid"
       borderRadius="md"
-      onMouseDown={(e) => {
-        if (e.button === 1) {
-          setIsMiddleMouseDown(true);
-        }
+      overflow="scroll"
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "0px",
+        },
+        "&::-webkit-scrollbar-track": {
+          width: "0px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "transparent",
+          borderRadius: "0px",
+        },
       }}
-      onMouseUp={(e) => {
-        if (e.button === 1) {
-          setIsMiddleMouseDown(false);
-        }
-      }}
-      onMouseMove={onMouseMovement}
       {...chakraProps}
-      onMouseLeave={() => {
-        setIsMiddleMouseDown(false);
-      }}
-      onWheel={(e) => {
-        console.log(e.deltaY);
-
-        if (e.deltaY > 0) {
-          setMatrixZoom(matrixZoom + 0.1);
-        } else {
-          setMatrixZoom(matrixZoom - 0.1);
-        }
-      }}
-      w={`${matrixSize[0]}px`}
-      h={`${matrixSize[1]}px`}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={`${viewboxPosition[0]} ${viewboxPosition[1]} ${viewboxSize[0]} ${viewboxSize[1]}`}
-      >
-        {channelRuler}
-        {fixtureRuler}
-      </svg>
+      <HStack justifyContent="flex-start" alignItems="flex-start">
+        <VStack
+          alignItems="flex-start"
+          gap="5px"
+          position="sticky"
+          left="0"
+          zIndex="10"
+        >
+          {fixtureTags}
+        </VStack>
+        <VStack alignItems="flex-start" gap="5px" pl="100p">
+          {fixtureRanges}
+        </VStack>
+      </HStack>
     </Box>
   );
 }
@@ -148,4 +138,18 @@ function constraintToViewbox(
     Math.max(0, Math.min(max[0], position[0])),
     Math.max(0, Math.min(max[1], position[1])),
   ];
+}
+
+function createPropAddressing(): Addressing {
+  const firstChannel = Number((Math.random() * 120).toFixed(0));
+  return {
+    universe: "A",
+    firstChannel: firstChannel,
+    lastChannel: firstChannel + 33,
+    intersections: [],
+    fixtureUid: {
+      type: UidType.FIXTURE,
+      key: Number((Math.random() * 1000).toFixed()),
+    },
+  };
 }
