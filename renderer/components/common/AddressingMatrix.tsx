@@ -1,14 +1,34 @@
 import {
-  Box,
-  BoxProps,
+  Button,
   HStack,
-  RangeSlider,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  RangeSliderTrack,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Tab,
+  TabIndicator,
+  TabList,
+  TabPanel,
+  TabPanels,
+  TabProps,
+  Table,
+  TableCaption,
+  TableContainer,
+  Tabs,
   Tag,
+  Tbody,
+  Td,
   Text,
-  VStack,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { Addressing } from "../../../lib/types";
 import React, { useMemo, useState } from "react";
@@ -18,7 +38,7 @@ type Props = {
   addressings: Addressing[];
   editable?: boolean;
   onEdit: (addressings: Addressing[]) => void;
-} & BoxProps;
+} & TabProps;
 
 export default function AddressingMatrix({
   addressings,
@@ -35,15 +55,15 @@ export default function AddressingMatrix({
   const [localAddressings, setLocalAddressings] =
     useState<Addressing[]>(propAddressings);
 
-  const channelCount =
-    localAddressings[0].lastChannel - localAddressings[0].firstChannel + 1;
+  const distanceToLastChannel =
+    localAddressings[0].lastChannel - localAddressings[0].firstChannel;
 
   const updateAddressing = (addressing: Addressing, firstChannel: number) => {
     const idx = localAddressings.indexOf(addressing);
     const updatedAddressing: Addressing = {
       ...addressing,
       firstChannel: firstChannel,
-      lastChannel: firstChannel + channelCount - 1,
+      lastChannel: firstChannel + distanceToLastChannel,
     };
     const updatedLocalAddressings = [
       ...localAddressings.slice(0, idx),
@@ -54,122 +74,129 @@ export default function AddressingMatrix({
     setLocalAddressings(updatedLocalAddressings);
   };
 
-  const fixtureTags = useMemo(() => {
+  const fixtureList = useMemo(() => {
     return localAddressings.map((addressing, idx) => {
       return (
-        <Tag key={idx} h="25px !important" bg="tag.purple">
-          {"#" + addressing.fixtureUid.type + addressing.fixtureUid.key}
-        </Tag>
+        <Tr h="40px">
+          <Td>
+            <Text w="100%" color="primary" textAlign="center">
+              {" "}
+              {"#" + addressing.fixtureUid.type + addressing.fixtureUid.key}
+            </Text>
+          </Td>
+          <Td>
+            <Input
+              value={addressing.firstChannel}
+              onChange={(e) => {
+                const firstChannel = Math.max(
+                  0,
+                  Math.min(511, Number(e.target.value))
+                );
+                updateAddressing(addressing, firstChannel);
+              }}
+              w="100%"
+              textAlign="center"
+              variant="custom"
+              type="number"
+            />
+          </Td>
+          <Td>
+            <Input
+              value={addressing.lastChannel}
+              onChange={(e) => {
+                const firstChannel = Math.max(
+                  0 - distanceToLastChannel,
+                  Math.min(511, Number(e.target.value) - distanceToLastChannel)
+                );
+                updateAddressing(addressing, firstChannel);
+              }}
+              w="100%"
+              textAlign="center"
+              variant="custom"
+              type="number"
+            />
+          </Td>
+        </Tr>
       );
     });
   }, [localAddressings]);
 
-  const fixtureRanges = useMemo(() => {
-    return localAddressings.map((addressing, idx) => {
-      return (
-        <RangeSlider
-          key={idx}
-          min={1}
-          max={511}
-          h="25px !important"
-          w="100%"
-          aria-label={["min", "max"]}
-          value={[addressing.firstChannel, addressing.lastChannel]}
-          onChange={(value: number[]) => {
-            if (value[0] === addressing.firstChannel) {
-              updateAddressing(addressing, value[1] - channelCount + 1);
-            } else {
-              updateAddressing(addressing, value[0]);
-            }
-          }}
-        >
-          <RangeSliderTrack h="23px" bg="bg.mid">
-            <Box
-              w="100%"
-              h="23px"
-              bg="bg.mid"
-              border="1px solid"
-              borderColor="bg.dark"
-            />
-            <RangeSliderFilledTrack bg="bg.dark" h="100%" color="primary">
-              <HStack px="3" w="100%" h="100%" justifyContent="space-between">
-                <Text>{addressing.firstChannel}</Text>
-                <Text textAlign="right">{addressing.lastChannel}</Text>
-              </HStack>
-            </RangeSliderFilledTrack>
-          </RangeSliderTrack>
-          <RangeSliderThumb
-            h="23px"
-            w="1px"
-            index={0}
-            color="primary"
-            bg="bg.dark"
-            borderRadius="sm"
-            boxShadow="none"
-          />
-          <RangeSliderThumb
-            h="23px"
-            w="1px"
-            index={1}
-            color="primary"
-            bg="bg.dark"
-            borderRadius="sm"
-            boxShadow="none"
-          />
-        </RangeSlider>
-      );
-    });
-  }, [localAddressings, updateAddressing]);
-
   return (
-    <Box
-      p="6"
-      bg="bg.mid"
-      borderRadius="md"
-      overflow="scroll"
-      css={{
-        "&::-webkit-scrollbar": {
-          width: "0px",
-        },
-        "&::-webkit-scrollbar-track": {
-          width: "0px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: "transparent",
-          borderRadius: "0px",
-        },
-      }}
-      {...chakraProps}
-    >
-      <HStack justifyContent="flex-start" alignItems="flex-start">
-        <VStack
-          alignItems="flex-start"
-          gap="5px"
-          position="sticky"
-          left="0"
-          zIndex="10"
+    <Tabs isFitted variant="enclosed">
+      <TabList border="none !important">
+        <Tab
+          border="none !important"
+          bg="bg.mid"
+          color="text"
+          mr="4"
+          borderRadius="md"
+          outline="1px solid"
+          outlineColor="transparent"
+          _selected={{ outlineColor: "primary" }}
         >
-          {fixtureTags}
-        </VStack>
-        <VStack
-          alignItems="flex-start"
-          gap="5px"
-          pl="100p"
-          w="2000px !important"
+          Table
+        </Tab>
+        <Tab
+          border="none !important"
+          bg="bg.mid"
+          color="text"
+          borderRadius="md"
+          outline="1px solid"
+          outlineColor="transparent"
+          _selected={{ outlineColor: "primary" }}
         >
-          {fixtureRanges}
-        </VStack>
-      </HStack>
-    </Box>
+          Matrix
+        </Tab>
+      </TabList>
+      <TabPanels
+        mt="3"
+        bg="bg.mid"
+        h="500px"
+        overflowY="auto"
+        sx={{
+          "&::-webkit-scrollbar": {
+            w: "10px",
+          },
+          "&::-webkit-scrollbar-track": {
+            w: "10px",
+            bg: "bg.mid",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            borderRadius: "md",
+            bg: "primary",
+          },
+        }}
+        overflowX="hidden"
+        borderRadius="md"
+      >
+        <TabPanel>
+          <TableContainer>
+            <Table variant="custom">
+              <Thead>
+                <Tr>
+                  <Th textAlign="center">Fixture Uid</Th>
+                  <Th textAlign="center">First channel</Th>
+                  <Th textAlign="center">Last channel</Th>
+                </Tr>
+              </Thead>
+              <Tbody>{fixtureList}</Tbody>
+            </Table>
+          </TableContainer>
+        </TabPanel>
+        <TabPanel>
+          <svg viewBox="0 0 511"></svg>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   );
 }
 
 function createPropAddressing(): Addressing {
-  const firstChannel = Number((Math.random() * 120).toFixed(0));
+  const firstChannel = Number((Math.random() * 400).toFixed(0)) + 1;
   return {
     universe: "A",
     firstChannel: firstChannel,
-    lastChannel: firstChannel + 9,
+    lastChannel: firstChannel + 4,
     intersections: [],
     fixtureUid: {
       type: UidType.FIXTURE,

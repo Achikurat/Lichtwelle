@@ -89,14 +89,14 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
             {selectedFixtureMode && (
               <>
                 <HStack alignContent="flex-start">
-                  <Text>Address Options</Text>
+                  <Text>Addressing</Text>
                   <Tag>
                     {selectedFixtureDefintion.modes[selectedFixtureMode].length}{" "}
                     Channels
                   </Tag>
                 </HStack>
                 <br />
-                <HStack gap="50px">
+                <HStack gap="10px">
                   <Input
                     type="number"
                     variant="custom"
@@ -118,7 +118,10 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                     min={0}
                     max={255}
                   />
+                  <Button w="300px">Auto Map</Button>
                 </HStack>
+                <br />
+                <br />
                 <AddressingMatrix
                   addressings={[]}
                   onEdit={() => {}}
