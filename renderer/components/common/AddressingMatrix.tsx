@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Addressing } from "../../../lib/types";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { UidType } from "../../../lib/enums";
 
 type Props = {
@@ -32,27 +32,56 @@ export default function AddressingMatrix({
     propAddressings.push(createPropAddressing());
   }
 
+  const [localAddressings, setLocalAddressings] =
+    useState<Addressing[]>(propAddressings);
+
+  const channelCount =
+    localAddressings[0].lastChannel - localAddressings[0].firstChannel + 1;
+
+  const updateAddressing = (addressing: Addressing, firstChannel: number) => {
+    const idx = localAddressings.indexOf(addressing);
+    const updatedAddressing: Addressing = {
+      ...addressing,
+      firstChannel: firstChannel,
+      lastChannel: firstChannel + channelCount - 1,
+    };
+    const updatedLocalAddressings = [
+      ...localAddressings.slice(0, idx),
+      updatedAddressing,
+      ...localAddressings.slice(idx + 1),
+    ];
+
+    setLocalAddressings(updatedLocalAddressings);
+  };
+
   const fixtureTags = useMemo(() => {
-    return propAddressings.map((addressing, idx) => {
+    return localAddressings.map((addressing, idx) => {
       return (
         <Tag key={idx} h="25px !important" bg="tag.purple">
           {"#" + addressing.fixtureUid.type + addressing.fixtureUid.key}
         </Tag>
       );
     });
-  }, []);
+  }, [localAddressings]);
 
   const fixtureRanges = useMemo(() => {
-    return propAddressings.map((addressings, idx) => {
+    return localAddressings.map((addressing, idx) => {
       return (
         <RangeSlider
           key={idx}
-          min={0}
-          max={255}
+          min={1}
+          max={511}
           h="25px !important"
-          w="800px"
+          w="100%"
           aria-label={["min", "max"]}
-          defaultValue={[addressings.firstChannel, addressings.lastChannel]}
+          value={[addressing.firstChannel, addressing.lastChannel]}
+          onChange={(value: number[]) => {
+            if (value[0] === addressing.firstChannel) {
+              updateAddressing(addressing, value[1] - channelCount + 1);
+            } else {
+              updateAddressing(addressing, value[0]);
+            }
+          }}
         >
           <RangeSliderTrack h="23px" bg="bg.mid">
             <Box
@@ -64,33 +93,33 @@ export default function AddressingMatrix({
             />
             <RangeSliderFilledTrack bg="bg.dark" h="100%" color="primary">
               <HStack px="3" w="100%" h="100%" justifyContent="space-between">
-                <Text>{addressings.firstChannel}</Text>
-                <Text textAlign="right">{addressings.lastChannel}</Text>
+                <Text>{addressing.firstChannel}</Text>
+                <Text textAlign="right">{addressing.lastChannel}</Text>
               </HStack>
             </RangeSliderFilledTrack>
           </RangeSliderTrack>
           <RangeSliderThumb
             h="23px"
-            w="5px"
+            w="1px"
             index={0}
             color="primary"
             bg="bg.dark"
             borderRadius="sm"
             boxShadow="none"
-          ></RangeSliderThumb>
+          />
           <RangeSliderThumb
             h="23px"
-            w="5px"
+            w="1px"
             index={1}
             color="primary"
             bg="bg.dark"
             borderRadius="sm"
             boxShadow="none"
-          ></RangeSliderThumb>
+          />
         </RangeSlider>
       );
     });
-  }, []);
+  }, [localAddressings, updateAddressing]);
 
   return (
     <Box
@@ -122,7 +151,12 @@ export default function AddressingMatrix({
         >
           {fixtureTags}
         </VStack>
-        <VStack alignItems="flex-start" gap="5px" pl="100p">
+        <VStack
+          alignItems="flex-start"
+          gap="5px"
+          pl="100p"
+          w="2000px !important"
+        >
           {fixtureRanges}
         </VStack>
       </HStack>
@@ -130,22 +164,12 @@ export default function AddressingMatrix({
   );
 }
 
-function constraintToViewbox(
-  position: [number, number],
-  max: [number, number]
-): [number, number] {
-  return [
-    Math.max(0, Math.min(max[0], position[0])),
-    Math.max(0, Math.min(max[1], position[1])),
-  ];
-}
-
 function createPropAddressing(): Addressing {
   const firstChannel = Number((Math.random() * 120).toFixed(0));
   return {
     universe: "A",
     firstChannel: firstChannel,
-    lastChannel: firstChannel + 33,
+    lastChannel: firstChannel + 9,
     intersections: [],
     fixtureUid: {
       type: UidType.FIXTURE,
