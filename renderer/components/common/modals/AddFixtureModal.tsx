@@ -21,7 +21,7 @@ import { useSessionStore } from "../../../common/store/sessionStore";
 import AutoCompleteInput from "../AutoCompleteInput";
 import AddressingEdit from "../AddressingEdit";
 import { useInputState } from "../../../common/useInputState";
-import { createAutoAddressing } from "../../../common/fixture";
+import { createAutoAddressing, createFixtures } from "../../../common/fixture";
 import { BsTrash } from "react-icons/bs";
 
 type Props = {
@@ -54,24 +54,21 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
       ? selectedFixtureDefintion.modes[selectedFixtureMode].length
       : 0;
 
-  const [addressingProps, addressingState, setAddressingState] = useInputState({
+  const [inputProps, inputState, setInputState] = useInputState({
     start: 1,
     offset: 1,
     count: 5,
+    name: "",
   });
 
   const resetModal = useCallback(() => {
     setSelectedFixtureDefinition(undefined);
     setSelectedFixtureMode(undefined);
-  }, [
-    setSelectedFixtureDefinition,
-    setSelectedFixtureMode,
-    setAddressingState,
-  ]);
+  }, [setSelectedFixtureDefinition, setSelectedFixtureMode, setInputState]);
 
   useEffect(() => {
-    setAddressingState({ ...addressingState, offset: channelCount });
-  }, [selectedFixtureMode, setAddressingState]);
+    setInputState({ ...inputState, offset: channelCount });
+  }, [selectedFixtureMode, setInputState]);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
@@ -131,33 +128,30 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                 <Input
                   variant="custom"
                   placeholder="Start address"
-                  name="startAddress"
                   min={1}
                   max={511}
-                  {...addressingProps["start"]}
+                  {...inputProps["start"]}
                 />
                 <Input
                   variant="custom"
                   placeholder="Offset"
-                  name="offset"
                   min={-200}
-                  {...addressingProps["offset"]}
+                  {...inputProps["offset"]}
                 />
                 <Input
                   variant="custom"
                   placeholder="Fixture count"
-                  name="fxCount"
                   min={1}
-                  {...addressingProps["count"]}
+                  {...inputProps["count"]}
                 />
                 <Button
                   w="300px"
                   onClick={() => {
                     setLocalAddressings(
                       createAutoAddressing(
-                        Number(addressingState["start"]),
-                        Number(addressingState["offset"]),
-                        Number(addressingState["count"]),
+                        Number(inputState["start"]),
+                        Number(inputState["offset"]),
+                        Number(inputState["count"]),
                         channelCount
                       )
                     );
@@ -176,11 +170,33 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                 width="625px"
                 height="400px"
               />
+
+              {localAddressings.length !== 0 && (
+                <>
+                  <Divider my="3" />
+                  <Input
+                    variant="custom"
+                    placeholder="Display name"
+                    max={32}
+                    {...inputProps["name"]}
+                  />
+                </>
+              )}
             </>
           )}
         </ModalBody>
         <ModalFooter>
-          <Button w="100%" isDisabled={localAddressings.length === 0}>
+          <Button
+            w="100%"
+            isDisabled={inputState["name"] === ""}
+            onClick={() =>
+              createFixtures(
+                localAddressings,
+                selectedFixtureDefintion,
+                inputState["name"].toString()
+              )
+            }
+          >
             Create
           </Button>
         </ModalFooter>

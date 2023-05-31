@@ -3,19 +3,50 @@ import { Addressing, Fixture, FixtureDefinition } from "../../lib/types";
 import { useSessionStore } from "./store/sessionStore";
 import { IpcMessageType, UidType } from "../../lib/enums";
 import { usePersistentStore } from "./store/persistentStore";
+import next from "next/types";
 
 const ipcRenderer = electron.ipcRenderer || false;
 
 export function addFixtures(fixtures: Fixture[]) {
-  const [sessionFixtures, updateSessionState] = useSessionStore((state) => [
-    state.fixtures,
-    state.updateSessionState,
-  ]);
-
-  updateSessionState({ fixtures: [...sessionFixtures, ...fixtures] });
+  useSessionStore.setState({
+    fixtures: [...useSessionStore.getState().fixtures, ...fixtures],
+  });
+  updateFixtureUids();
+  console.log(useSessionStore.getState().fixtures);
 }
 
-export function createFixtures() {}
+export function updateFixtureUids() {
+  const fixtureUidKeys = useSessionStore
+    .getState()
+    .fixtures.map((fixture) => fixture.uid.key);
+  useSessionStore.setState({
+    uids: {
+      ...useSessionStore.getState().uids,
+      [UidType.FIXTURE]: fixtureUidKeys,
+    },
+  });
+}
+
+export function createFixtures(
+  addressings: Addressing[],
+  fixtureDefinition: FixtureDefinition,
+  name: string
+) {
+  const fixtureUidKeys = nextFreeUidKeys(addressings.length);
+  addFixtures(
+    addressings.map((addressing, idx): Fixture => {
+      return {
+        uid: {
+          type: UidType.FIXTURE,
+          key: fixtureUidKeys[idx],
+        },
+        name: name,
+        addressing: addressing,
+        definition: fixtureDefinition,
+      };
+    })
+  );
+}
 
 export function createAutoAddressing(
   startAddress: number,
@@ -37,12 +68,23 @@ export function createAutoAddressing(
   return addressings;
 }
 
-export function nextFreeUidKey() {
-  const fixtureUidKeys = useSessionStore
+export function nextFreeUidKeys(amount: number): number[] {
+  const originalUidKeys = useSessionStore
     .getState()
-    .uids.filter((uid) => uid.type === UidType.FIXTURE)
-    .map((uid) => uid.key)
-    .sort((a, b) => a - b);
+    .uids[UidType.FIXTURE].sort((a, b) => a - b);
+  const collectedUidKeys = [];
+  for (var i = 0; i < amount; i++) {
+    collectedUidKeys.push(
+      nextFreeUidKey([...originalUidKeys, ...collectedUidKeys])
+    );
+  }
+  return collectedUidKeys;
+}
+
+export function nextFreeUidKey(overrideUids?: number[]) {
+  const fixtureUidKeys =
+    overrideUids ||
+    useSessionStore.getState().uids[UidType.FIXTURE].sort((a, b) => a - b);
   var cKey = 1;
   fixtureUidKeys.every((key) => {
     if (cKey === key) {

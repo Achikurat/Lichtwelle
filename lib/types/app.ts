@@ -7,7 +7,7 @@ import {
 } from "../enums/";
 
 export type SessionState = {
-  uids: Uid[];
+  uids: { [type: string]: number[] };
   fixtures: Fixture[];
   fixtureDefinitions: FixtureDefinition[];
   groups: Group[];

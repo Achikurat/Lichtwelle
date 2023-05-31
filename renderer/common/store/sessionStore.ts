@@ -1,6 +1,6 @@
 import electron from "electron";
 import { create } from "zustand";
-import { View, IpcMessageType } from "../../../lib/enums";
+import { View, IpcMessageType, UidType } from "../../../lib/enums";
 import {
   PersistentSettings,
   SessionSettings,
@@ -15,7 +15,10 @@ const initalSessionSettings: SessionSettings = {
 };
 
 const initialSessionState: SessionState = {
-  uids: [],
+  uids: Object.assign(
+    {},
+    ...Object.values(UidType).map((key) => ({ [key]: [] }))
+  ),
   fixtures: [],
   fixtureDefinitions: [],
   cues: [],
