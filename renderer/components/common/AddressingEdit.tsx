@@ -80,76 +80,69 @@ export default function AddressingEdit({
   const fixtureList = useMemo(() => {
     return addressings.map((addressing, idx) => {
       return (
-        <>
-          <Tr key={idx}>
-            <Td>
-              <Box h="5px" />
-            </Td>
-          </Tr>
-          <Tr key={idx + 0.5}>
-            <Td bg="bg.dark" borderLeftRadius="md">
-              <Text w="100%" color="primary" textAlign="center">
-                {" "}
-                {"#" + idx}
-              </Text>
-            </Td>
-            <Td bg="bg.dark">
-              <Input
-                p="2 !important"
-                value={addressing.universe}
-                onChange={(e) => {}}
-                w="100%"
-                textAlign="center"
-                variant="custom"
-                maxLength={1}
-              />
-            </Td>
-            <Td bg="bg.dark">
-              <Input
-                p="2 !important"
-                value={addressing.firstChannel}
-                onChange={(e) => {
-                  const firstChannel = Math.max(
-                    0,
-                    Math.min(511, Number(e.target.value))
-                  );
-                  updateAddressing(addressing, firstChannel);
-                }}
-                w="100%"
-                textAlign="center"
-                variant="custom"
-                type="number"
-              />
-            </Td>
-            <Td bg="bg.dark">
-              <Input
-                p="2 !important"
-                value={addressing.lastChannel}
-                onChange={(e) => {
-                  const firstChannel = Math.max(
-                    1 - channelCount,
-                    Math.min(511, Number(e.target.value) - (channelCount - 1))
-                  );
-                  updateAddressing(addressing, firstChannel);
-                }}
-                w="100%"
-                textAlign="center"
-                variant="custom"
-                type="number"
-              />
-            </Td>
-            <Td bg="bg.dark" borderRightRadius="md">
-              <HStack p="3" borderRadius="md">
-                <Button p="1" onClick={() => addAddressing(idx)}>
-                  <BsPlusLg />
-                </Button>
-                <Button p="1" onClick={() => deleteAddressing(idx)}>
-                  <BsTrash />
-                </Button>
-              </HStack>
-            </Td>
-          </Tr>
-        </>
+        <Tr key={idx} borderTop="12px solid" borderColor="bg.mid">
+          <Td bg="bg.dark" borderLeftRadius="md">
+            <Text w="100%" color="primary" textAlign="center">
+              {" "}
+              {"#" + idx}
+            </Text>
+          </Td>
+          <Td bg="bg.dark">
+            <Input
+              p="2 !important"
+              value={addressing.universe}
+              onChange={(e) => {}}
+              w="100%"
+              textAlign="center"
+              variant="custom"
+              maxLength={1}
+            />
+          </Td>
+          <Td bg="bg.dark">
+            <Input
+              p="2 !important"
+              value={addressing.firstChannel}
+              onChange={(e) => {
+                const firstChannel = Math.max(
+                  0,
+                  Math.min(511, Number(e.target.value))
+                );
+                updateAddressing(addressing, firstChannel);
+              }}
+              w="100%"
+              textAlign="center"
+              variant="custom"
+              type="number"
+            />
+          </Td>
+          <Td bg="bg.dark">
+            <Input
+              p="2 !important"
+              value={addressing.lastChannel}
+              onChange={(e) => {
+                const firstChannel = Math.max(
+                  1 - channelCount,
+                  Math.min(511, Number(e.target.value) - (channelCount - 1))
+                );
+                updateAddressing(addressing, firstChannel);
+              }}
+              w="100%"
+              textAlign="center"
+              variant="custom"
+              type="number"
+            />
+          </Td>
+          <Td bg="bg.dark" borderRightRadius="md">
+            <HStack p="3" borderRadius="md">
+              <Button p="1" onClick={() => addAddressing(idx)}>
+                <BsPlusLg />
+              </Button>
+              <Button p="1" onClick={() => deleteAddressing(idx)}>
+                <BsTrash />
+              </Button>
+            </HStack>
+          </Td>
+        </Tr>
       );
     });
   }, [
