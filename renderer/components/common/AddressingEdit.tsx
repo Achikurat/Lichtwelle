@@ -241,28 +241,26 @@ export default function AddressingEdit({
               <Tbody>{fixtureList}</Tbody>
             </Table>
           </TableContainer>
-          {addressings.length === 0 && (
-            <Button
-              onClick={() => addAddressing(0)}
-              background="transparent"
-              border="2px dashed"
-              borderColor="bg.dark"
-              color="bg.dark"
-              w="100%"
-              h="50px"
-              mt="20px"
-              _hover={{
-                borderColor: "primary",
-                color: "primary",
-              }}
-              _active={{
-                color: "bg.dark",
-                backgroundColor: "primary !important",
-              }}
-            >
-              <BsPlusLg size="40px" />
-            </Button>
-          )}
+          <Button
+            onClick={() => addAddressing(addressings.length)}
+            background="transparent"
+            border="2px dashed"
+            borderColor="bg.dark"
+            color="bg.dark"
+            w="100%"
+            h="50px"
+            mt="20px"
+            _hover={{
+              borderColor: "primary",
+              color: "primary",
+            }}
+            _active={{
+              color: "bg.dark",
+              backgroundColor: "primary !important",
+            }}
+          >
+            <BsPlusLg size="40px" />
+          </Button>
         </TabPanel>
         <TabPanel>
           <svg

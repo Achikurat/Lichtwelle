@@ -64,7 +64,13 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   const resetModal = useCallback(() => {
     setSelectedFixtureDefinition(undefined);
     setSelectedFixtureMode(undefined);
-  }, [setSelectedFixtureDefinition, setSelectedFixtureMode, setInputState]);
+    setLocalAddressings([]);
+  }, [
+    setSelectedFixtureDefinition,
+    setSelectedFixtureMode,
+    setInputState,
+    setLocalAddressings,
+  ]);
 
   useEffect(() => {
     setInputState({ ...inputState, offset: channelCount });
@@ -171,31 +177,31 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                 height="400px"
               />
 
-              {localAddressings.length !== 0 && (
-                <>
-                  <Divider my="3" />
-                  <Input
-                    variant="custom"
-                    placeholder="Display name"
-                    max={32}
-                    {...inputProps["name"]}
-                  />
-                </>
-              )}
+              <Divider my="3" />
+              <Input
+                variant="custom"
+                placeholder="Display name"
+                max={32}
+                {...inputProps["name"]}
+              />
             </>
           )}
         </ModalBody>
         <ModalFooter>
           <Button
             w="100%"
-            isDisabled={inputState["name"] === ""}
-            onClick={() =>
+            isDisabled={
+              inputState["name"] === "" || localAddressings.length === 0
+            }
+            onClick={() => {
               createFixtures(
                 localAddressings,
                 selectedFixtureDefintion,
                 inputState["name"].toString()
-              )
-            }
+              );
+              resetModal();
+              onClose();
+            }}
           >
             Create
           </Button>
