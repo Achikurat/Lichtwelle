@@ -1,5 +1,4 @@
 import { InputProps } from "@chakra-ui/react";
-import { log } from "console";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
 type initalValues = { [name: string]: string | number };

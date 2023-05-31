@@ -2,6 +2,8 @@ import {
   Button,
   Divider,
   HStack,
+  Heading,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -13,13 +15,14 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Addressing, FixtureDefinition } from "../../../../lib/types/app";
 import { useSessionStore } from "../../../common/store/sessionStore";
 import AutoCompleteInput from "../AutoCompleteInput";
 import AddressingEdit from "../AddressingEdit";
 import { useInputState } from "../../../common/useInputState";
 import { createAutoAddressing } from "../../../common/fixture";
+import { BsTrash } from "react-icons/bs";
 
 type Props = {
   isOpen: boolean;
@@ -37,7 +40,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
   const [localAddressings, setLocalAddressings] = useState<Addressing[]>([]);
 
   const fixtureDefinitionsEntires: string[] = fixtureDefinitions.map(
-    (fx: FixtureDefinition): string => fx.manufacturer + "/" + fx.name
+    (fx: FixtureDefinition): string => getSearchString(fx)
   );
 
   const fixtureModeEntries: string[] = useMemo(() => {
@@ -57,6 +60,15 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
     count: 5,
   });
 
+  const resetModal = useCallback(() => {
+    setSelectedFixtureDefinition(undefined);
+    setSelectedFixtureMode(undefined);
+  }, [
+    setSelectedFixtureDefinition,
+    setSelectedFixtureMode,
+    setAddressingState,
+  ]);
+
   useEffect(() => {
     setAddressingState({ ...addressingState, offset: channelCount });
   }, [selectedFixtureMode, setAddressingState]);
@@ -65,12 +77,20 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay backdropBlur="2px" />
       <ModalContent>
-        <ModalHeader>Add Fixture</ModalHeader>
+        <ModalHeader>
+          <HStack>
+            <Heading>Add Fixture</Heading>
+            <Button p="2" mx="3" onClick={resetModal}>
+              <BsTrash />
+            </Button>
+          </HStack>
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <AutoCompleteInput
             placeholder="Search for fixtures..."
             w="100% !important"
+            selectedEntry={getSearchString(selectedFixtureDefintion)}
             entries={fixtureDefinitionsEntires}
             onSelectEntry={(idx: number) => {
               if (idx === -1) {
@@ -88,6 +108,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
               <AutoCompleteInput
                 placeholder="Search for modes..."
                 w="100% !important"
+                selectedEntry={selectedFixtureMode || ""}
                 entries={fixtureModeEntries}
                 onSelectEntry={(idx: number) => {
                   if (idx !== -1) {
@@ -159,9 +180,17 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
           )}
         </ModalBody>
         <ModalFooter>
-          <Button w="100%">Create</Button>
+          <Button w="100%" isDisabled={localAddressings.length === 0}>
+            Create
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
+}
+
+function getSearchString(fixture: FixtureDefinition | undefined): string {
+  if (fixture !== undefined) {
+    return fixture.manufacturer + "/" + fixture.name;
+  } else return "";
 }

@@ -12,11 +12,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   entries: string[];
+  selectedEntry: string;
   onSelectEntry: (idx: number) => void;
 } & InputProps;
 
 export default function AutoCompleteInput({
   entries,
+  selectedEntry,
   onSelectEntry,
   ...chakraProps
 }: Props) {
@@ -28,7 +30,6 @@ export default function AutoCompleteInput({
   const selectEntry = (entry: string, idx: number) => {
     onSelectEntry(idx);
     setVisible(false);
-    setLocalInput(entry);
   };
 
   const filteredEntries = entries.filter((entry) => {
@@ -62,6 +63,10 @@ export default function AutoCompleteInput({
       focusRef.current.scrollIntoView();
     }
   }, [autocompleteOptions, focusIndex]);
+
+  useEffect(() => {
+    setLocalInput(selectedEntry);
+  }, [setLocalInput, selectedEntry]);
 
   return (
     <>
