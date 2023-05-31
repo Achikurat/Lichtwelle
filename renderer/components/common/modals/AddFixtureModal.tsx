@@ -19,6 +19,8 @@ import { Addressing, FixtureDefinition } from "../../../../lib/types/app";
 import { useSessionStore } from "../../../common/store/sessionStore";
 import AutoCompleteInput from "../AutoCompleteInput";
 import AddressingEdit from "../AddressingEdit";
+import { Form, Formik } from "formik";
+import { createAutoAddressing } from "../../../common/fixture";
 
 type Props = {
   isOpen: boolean;
@@ -45,6 +47,11 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
     }
   }, [selectedFixtureDefintion]);
 
+  const channelCount =
+    selectedFixtureMode !== undefined
+      ? selectedFixtureDefintion.modes[selectedFixtureMode].length
+      : 0;
+
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay backdropBlur="2px" />
@@ -52,87 +59,85 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
         <ModalHeader>Add Fixture</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl spellCheck="false">
-            <AutoCompleteInput
-              placeholder="Search for fixtures..."
-              w="100% !important"
-              entries={fixtureDefinitionsEntires}
-              onSelectEntry={(idx: number) => {
-                if (idx === -1) {
-                  setSelectedFixtureDefinition(undefined);
-                } else {
-                  setSelectedFixtureDefinition(fixtureDefinitions[idx]);
-                }
-                setSelectedFixtureMode(undefined);
-              }}
-            />
-            {selectedFixtureDefintion && (
-              <>
-                <br />
-                <br />
-                <AutoCompleteInput
-                  placeholder="Search for modes..."
-                  w="100% !important"
-                  entries={fixtureModeEntries}
-                  onSelectEntry={(idx: number) => {
-                    if (idx !== -1) {
-                      setSelectedFixtureMode(fixtureModeEntries[idx]);
-                    }
-                  }}
-                />
-              </>
-            )}
+          <AutoCompleteInput
+            placeholder="Search for fixtures..."
+            w="100% !important"
+            entries={fixtureDefinitionsEntires}
+            onSelectEntry={(idx: number) => {
+              if (idx === -1) {
+                setSelectedFixtureDefinition(undefined);
+              } else {
+                setSelectedFixtureDefinition(fixtureDefinitions[idx]);
+              }
+              setSelectedFixtureMode(undefined);
+            }}
+          />
+          {selectedFixtureDefintion && (
+            <>
+              <br />
+              <br />
+              <AutoCompleteInput
+                placeholder="Search for modes..."
+                w="100% !important"
+                entries={fixtureModeEntries}
+                onSelectEntry={(idx: number) => {
+                  if (idx !== -1) {
+                    setSelectedFixtureMode(fixtureModeEntries[idx]);
+                  }
+                }}
+              />
+            </>
+          )}
+          <Divider my="6" />
+          {selectedFixtureMode && (
+            <>
+              <HStack alignContent="flex-start">
+                <Text>Addressing</Text>
+                <Tag>{channelCount} Channels</Tag>
+              </HStack>
+              <Divider my="3" borderColor="transparent" />
 
-            <br />
-            <br />
-            <Divider />
-            <br />
-            {selectedFixtureMode && (
-              <>
-                <HStack alignContent="flex-start">
-                  <Text>Addressing</Text>
-                  <Tag>
-                    {selectedFixtureDefintion.modes[selectedFixtureMode].length}{" "}
-                    Channels
-                  </Tag>
-                </HStack>
-                <br />
-                <HStack gap="10px">
-                  <Input
-                    type="number"
-                    variant="custom"
-                    placeholder="Start address"
-                    min={0}
-                    max={255}
-                  />
-                  <Input
-                    type="number"
-                    variant="custom"
-                    placeholder="Offset"
-                    min={0}
-                    max={255}
-                  />
-                  <Input
-                    type="number"
-                    variant="custom"
-                    placeholder="Fixture count"
-                    min={0}
-                    max={255}
-                  />
-                  <Button w="300px">Auto Map</Button>
-                </HStack>
-                <br />
-                <AddressingEdit
-                  addressings={localAddressings}
-                  onEdit={(newAddressing) => {
-                    setLocalAddressings(newAddressing);
-                  }}
-                  width="625px"
-                  height="400px"
+              <HStack gap="10px">
+                <Input
+                  type="number"
+                  variant="custom"
+                  placeholder="Start address"
+                  name="startAddress"
+                  min={0}
+                  max={255}
                 />
-              </>
-            )}
-          </FormControl>
+                <Input
+                  type="number"
+                  variant="custom"
+                  placeholder="Offset"
+                  name="offset"
+                  min={0}
+                  max={255}
+                />
+                <Input
+                  type="number"
+                  variant="custom"
+                  placeholder="Fixture count"
+                  name="fxCount"
+                  min={0}
+                  max={255}
+                />
+                <Button w="300px" type="submit">
+                  Auto Map
+                </Button>
+              </HStack>
+              <Divider my="3" borderColor="transparent" />
+              <AddressingEdit
+                channelCount={channelCount}
+                addressings={localAddressings}
+                onEdit={(newAddressing) => {
+                  setLocalAddressings(newAddressing);
+                }}
+                width="625px"
+                height="400px"
+              />
+            </>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button w="100%">Create</Button>

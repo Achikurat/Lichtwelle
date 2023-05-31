@@ -24,26 +24,23 @@ import React, { useMemo } from "react";
 import { BsPlusLg, BsTrash } from "react-icons/bs";
 
 type Props = {
+  channelCount: number;
   addressings: Addressing[];
   onEdit: (addressings: Addressing[]) => void;
 } & TabPanelsProps;
 
 export default function AddressingEdit({
+  channelCount,
   addressings,
   onEdit,
   ...chakraProps
 }: Props) {
-  const distanceToLastChannel =
-    addressings.length > 0
-      ? addressings[0].lastChannel - addressings[0].firstChannel
-      : 0;
-
   const updateAddressing = (addressing: Addressing, firstChannel: number) => {
     const idx = addressings.indexOf(addressing);
     const updatedAddressing: Addressing = {
       ...addressing,
       firstChannel: firstChannel,
-      lastChannel: firstChannel + distanceToLastChannel,
+      lastChannel: firstChannel + channelCount - 1,
     };
     const updatedLocalAddressings = [
       ...addressings.slice(0, idx),
@@ -57,7 +54,7 @@ export default function AddressingEdit({
   const addAddressing = (idx: number) => {
     const newAddressing: Addressing = {
       firstChannel: 1,
-      lastChannel: 1 + distanceToLastChannel,
+      lastChannel: channelCount,
       intersections: [],
       universe: "A",
     };
@@ -85,7 +82,9 @@ export default function AddressingEdit({
       return (
         <>
           <Tr>
-            <Box h="5px" />
+            <Td>
+              <Box h="5px" />
+            </Td>
           </Tr>
           <Tr key={idx}>
             <Td bg="bg.dark" borderLeftRadius="md">
@@ -128,11 +127,8 @@ export default function AddressingEdit({
                 value={addressing.lastChannel}
                 onChange={(e) => {
                   const firstChannel = Math.max(
-                    0 - distanceToLastChannel,
-                    Math.min(
-                      511,
-                      Number(e.target.value) - distanceToLastChannel
-                    )
+                    1 - channelCount,
+                    Math.min(511, Number(e.target.value) - channelCount - 1)
                   );
                   updateAddressing(addressing, firstChannel);
                 }}
@@ -158,7 +154,7 @@ export default function AddressingEdit({
     });
   }, [
     addressings,
-    distanceToLastChannel,
+    channelCount,
     addAddressing,
     deleteAddressing,
     updateAddressing,
@@ -168,16 +164,17 @@ export default function AddressingEdit({
     return addressings.map((addressing, idx) => {
       return (
         <rect
+          key={idx}
           x={addressing.firstChannel}
           y={idx * 20}
-          width={distanceToLastChannel}
+          width={channelCount - 1}
           height={20}
           fill="primary"
           stroke="primary"
         />
       );
     });
-  }, [addressings, distanceToLastChannel]);
+  }, [addressings, channelCount]);
 
   return (
     <Tabs isFitted variant="enclosed">
