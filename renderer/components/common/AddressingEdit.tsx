@@ -81,12 +81,12 @@ export default function AddressingEdit({
     return addressings.map((addressing, idx) => {
       return (
         <>
-          <Tr>
+          <Tr key={idx}>
             <Td>
               <Box h="5px" />
             </Td>
           </Tr>
-          <Tr key={idx}>
+          <Tr key={idx + 0.5}>
             <Td bg="bg.dark" borderLeftRadius="md">
               <Text w="100%" color="primary" textAlign="center">
                 {" "}
@@ -128,7 +128,7 @@ export default function AddressingEdit({
                 onChange={(e) => {
                   const firstChannel = Math.max(
                     1 - channelCount,
-                    Math.min(511, Number(e.target.value) - channelCount - 1)
+                    Math.min(511, Number(e.target.value) - (channelCount - 1))
                   );
                   updateAddressing(addressing, firstChannel);
                 }}

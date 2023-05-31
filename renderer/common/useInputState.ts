@@ -1,6 +1,6 @@
 import { InputProps } from "@chakra-ui/react";
 import { log } from "console";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
 type initalValues = { [name: string]: string | number };
 
@@ -21,12 +21,15 @@ export function useInputState(
     const value = event.target.value;
 
     if (type === "number") {
-      if (value.match(/^[0-9 ()+-]+$|^$|^\s$/)) {
+      if (/[0-9]/.test(value)) {
+        const numberValue = Number(value);
         if (Number(value) >= min && Number(value) <= max) {
-          setInputState({ ...inputState, [name]: Number(value) });
+          setInputState({ ...inputState, [name]: numberValue });
         } else if (value === "") {
           setInputState({ ...inputState, [name]: "" });
         }
+      } else {
+        setInputState({ ...inputState, [name]: value });
       }
     } else {
       if (value.length <= max) {
@@ -35,11 +38,20 @@ export function useInputState(
     }
   };
 
+  const handleKeyPress = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      !/[0-9.+-]/.test(e.key) && e.preventDefault();
+    },
+    []
+  );
+
   const inputProps = Object.assign(
     {},
     ...Object.keys(initialValues).map((key) => ({
       [key]: {
         onChange: handleChange,
+        onKeyPress:
+          typeof initialValues[key] === "number" ? handleKeyPress : undefined,
         value: inputState[key],
         name: key,
       },

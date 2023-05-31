@@ -119,6 +119,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                   variant="custom"
                   placeholder="Offset"
                   name="offset"
+                  min={-200}
                   {...addressingProps["offset"]}
                 />
                 <Input
