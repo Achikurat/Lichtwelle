@@ -1,14 +1,50 @@
-import { useState } from "react";
+import { InputProps } from "@chakra-ui/react";
+import { log } from "console";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export function useInputState(initialValues: any) {
-  const [inputState, setInputState] =
-    useState<typeof initialValues>(initialValues);
+type initalValues = { [name: string]: string | number };
 
-  const handleChange = (event: React.ChangeEvent) => {};
+export function useInputState(
+  initialValues: initalValues
+): [
+  { [name: string]: InputProps },
+  { [name: string]: string | number },
+  Dispatch<SetStateAction<initalValues>>
+] {
+  const [inputState, setInputState] = useState<initalValues>(initialValues);
 
-  const inputProps = {
-    onChange: handleChange,
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const min = event.target.min ? Number(event.target.min) : -1000;
+    const max = event.target.max ? Number(event.target.max) : 1000;
+    const name = event.target.name;
+    const type = typeof initialValues[name];
+    const value = event.target.value;
+
+    if (type === "number") {
+      if (value.match(/^[0-9 ()+-]+$|^$|^\s$/)) {
+        if (Number(value) >= min && Number(value) <= max) {
+          setInputState({ ...inputState, [name]: Number(value) });
+        } else if (value === "") {
+          setInputState({ ...inputState, [name]: "" });
+        }
+      }
+    } else {
+      if (value.length <= max) {
+        setInputState({ ...inputState, [name]: value });
+      }
+    }
   };
 
-  return [inputProps];
+  const inputProps = Object.assign(
+    {},
+    ...Object.keys(initialValues).map((key) => ({
+      [key]: {
+        onChange: handleChange,
+        value: inputState[key],
+        name: key,
+      },
+    }))
+  );
+
+  return [inputProps, inputState, setInputState];
 }

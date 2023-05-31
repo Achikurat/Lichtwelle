@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  FormControl,
   HStack,
   Input,
   Modal,
@@ -14,12 +13,12 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Addressing, FixtureDefinition } from "../../../../lib/types/app";
 import { useSessionStore } from "../../../common/store/sessionStore";
 import AutoCompleteInput from "../AutoCompleteInput";
 import AddressingEdit from "../AddressingEdit";
-import { Form, Formik } from "formik";
+import { useInputState } from "../../../common/useInputState";
 import { createAutoAddressing } from "../../../common/fixture";
 
 type Props = {
@@ -51,6 +50,16 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
     selectedFixtureMode !== undefined
       ? selectedFixtureDefintion.modes[selectedFixtureMode].length
       : 0;
+
+  const [addressingProps, addressingState, setAddressingState] = useInputState({
+    start: 1,
+    offset: 1,
+    count: 5,
+  });
+
+  useEffect(() => {
+    setAddressingState({ ...addressingState, offset: channelCount });
+  }, [selectedFixtureMode, setAddressingState]);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
@@ -99,30 +108,39 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
 
               <HStack gap="10px">
                 <Input
-                  type="number"
                   variant="custom"
                   placeholder="Start address"
                   name="startAddress"
-                  min={0}
-                  max={255}
+                  min={1}
+                  max={511}
+                  {...addressingProps["start"]}
                 />
                 <Input
-                  type="number"
                   variant="custom"
                   placeholder="Offset"
                   name="offset"
-                  min={0}
-                  max={255}
+                  {...addressingProps["offset"]}
                 />
                 <Input
-                  type="number"
                   variant="custom"
                   placeholder="Fixture count"
                   name="fxCount"
-                  min={0}
-                  max={255}
+                  min={1}
+                  {...addressingProps["count"]}
                 />
-                <Button w="300px" type="submit">
+                <Button
+                  w="300px"
+                  onClick={() => {
+                    setLocalAddressings(
+                      createAutoAddressing(
+                        Number(addressingState["start"]),
+                        Number(addressingState["offset"]),
+                        Number(addressingState["count"]),
+                        channelCount
+                      )
+                    );
+                  }}
+                >
                   Auto Map
                 </Button>
               </HStack>
