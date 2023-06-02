@@ -1,6 +1,4 @@
 import {
-  Box,
-  BoxProps,
   Button,
   HStack,
   Input,

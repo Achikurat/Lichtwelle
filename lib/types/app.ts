@@ -78,6 +78,8 @@ export type Fixture = {
   name: string;
   addressing: Addressing;
   definition: FixtureDefinition;
+  mode: string;
+  channels: Channel[];
 };
 
 export type FixtureDefinition = {

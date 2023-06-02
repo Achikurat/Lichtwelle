@@ -30,6 +30,7 @@ export function updateFixtureUids() {
 export function createFixtures(
   addressings: Addressing[],
   fixtureDefinition: FixtureDefinition,
+  channelMode: string,
   name: string
 ) {
   const fixtureUidKeys = nextFreeUidKeys(addressings.length);
@@ -43,6 +44,10 @@ export function createFixtures(
         name: name,
         addressing: addressing,
         definition: fixtureDefinition,
+        mode: channelMode,
+        channels: fixtureDefinition.modes[channelMode].map(
+          (string) => fixtureDefinition.channels[string]
+        ),
       };
     })
   );

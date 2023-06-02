@@ -181,7 +181,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
               <Input
                 variant="custom"
                 placeholder="Display name"
-                max={32}
+                max={6}
                 {...inputProps["name"]}
               />
             </>
@@ -197,6 +197,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
               createFixtures(
                 localAddressings,
                 selectedFixtureDefintion,
+                selectedFixtureMode,
                 inputState["name"].toString()
               );
               resetModal();
