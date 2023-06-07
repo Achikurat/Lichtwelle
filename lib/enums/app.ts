@@ -24,7 +24,6 @@ export enum EasingFunction {}
 export enum View {
   HOME = "Home",
   FIXTURES = "Fixtures",
-  GROUPS = "Groups",
   CUE_EDITOR = "Cue Editor",
   MAPPING = "Mapping",
   MIR = "MIR",

@@ -100,8 +100,6 @@ function getTabIcon(view: View): ReactElement {
       return <BsHouse />;
     case View.FIXTURES:
       return <BsLamp />;
-    case View.GROUPS:
-      return <BsFolder />;
     case View.CUE_EDITOR:
       return <BsCaretRightSquare />;
     case View.MAPPING:

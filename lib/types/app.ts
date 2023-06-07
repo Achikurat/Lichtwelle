@@ -62,7 +62,7 @@ export type CueInstance = {
   currentStep: number;
   syncWithTransport: boolean;
   valueMap: { [channel: number]: number[][] };
-  src: Cue;
+  src: Uid;
 };
 
 export type Mapping = {
@@ -100,13 +100,13 @@ export type Addressing = {
 export type Group = {
   uid: Uid;
   name: string;
-  fixtures: Fixture[];
+  fixtures: Uid[];
 };
 
 export type Cue = {
   uid: Uid;
   tracks: { [groupName: string]: CueTrack[] };
-  fixtures: Fixture[];
+  fixtures: Uid[];
   length: number;
 };
 

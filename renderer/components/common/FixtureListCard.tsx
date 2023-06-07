@@ -11,12 +11,53 @@ import { Fixture } from "../../../lib/types";
 
 type Props = {
   fixtures: Fixture[];
+  selectedFixtures: number[];
+  onUpdateSelectedFixtures: (uidKeys: number[]) => void;
+  isShiftDown?: boolean;
+  isControlDown?: boolean;
 };
 
-export default function CardList({ fixtures }: Props) {
+export default function FixtureListCard({
+  fixtures,
+  selectedFixtures,
+  onUpdateSelectedFixtures,
+  isShiftDown = false,
+  isControlDown = false,
+}: Props) {
   const definition = fixtures[0].definition;
   const channels = fixtures[0].channels;
   const mode = fixtures[0].mode;
+
+  const onClickFixtureItem = (uidKey: number) => {
+    if (!isShiftDown && !isControlDown) {
+      onUpdateSelectedFixtures([uidKey]);
+    } else if (isShiftDown) {
+      window.getSelection().removeAllRanges();
+      const fixtureUidKeys = fixtures.map((fixture) => fixture.uid.key);
+      if (selectedFixtures.length !== 0) {
+        const indexOfSelection = fixtureUidKeys.indexOf(selectedFixtures[0]);
+        if (indexOfSelection !== -1) {
+          const indexOfClicked = fixtureUidKeys.indexOf(uidKey);
+          if (indexOfClicked !== -1) {
+            const fixturesInBetween = fixtureUidKeys.slice(
+              Math.min(indexOfSelection, indexOfClicked),
+              Math.max(indexOfSelection, indexOfClicked) + 1
+            );
+            onUpdateSelectedFixtures(fixturesInBetween);
+          }
+        }
+      }
+    } else if (isControlDown) {
+      if (selectedFixtures.indexOf(uidKey) !== -1) {
+        onUpdateSelectedFixtures([
+          ...selectedFixtures.slice(0, selectedFixtures.indexOf(uidKey)),
+          ...selectedFixtures.slice(selectedFixtures.indexOf(uidKey) + 1),
+        ]);
+      } else {
+        onUpdateSelectedFixtures(selectedFixtures.concat([uidKey]));
+      }
+    }
+  };
 
   const fixtureItem = useMemo(() => {
     return fixtures.map((fixture, key) => {
@@ -27,10 +68,17 @@ export default function CardList({ fixtures }: Props) {
           h="40px"
           p="2"
           bg="bg.mid"
+          outline={
+            selectedFixtures.indexOf(fixture.uid.key) != -1
+              ? "1px solid blue"
+              : "undefined"
+          }
+          onClick={() => onClickFixtureItem(fixture.uid.key)}
           borderRadius="md"
           flexShrink="0"
           justifyContent="space-between"
           divider={<StackDivider borderColor="bg.dark" />}
+          userSelect={isShiftDown || isControlDown ? "none" : "auto"}
         >
           <Tag>{`#F${fixture.uid.key}`}</Tag>
           <Text color="text" size="sm" w="50px">{`${fixture.name}`}</Text>
@@ -47,7 +95,7 @@ export default function CardList({ fixtures }: Props) {
         </HStack>
       );
     });
-  }, [fixtures]);
+  }, [fixtures, onClickFixtureItem, selectedFixtures]);
 
   return (
     <VStack w="300px" bg="bg.dark" borderRadius="md" p="3">
