@@ -44,9 +44,11 @@ export default function AutoCompleteInput({
       const idx = entries.indexOf(entry);
       return (
         <Button
+          variant="custom"
           key={idx}
           w="100%"
           p="3"
+          border="none !imporant"
           onClick={() => selectEntry(entry, idx)}
           color={lidx === focusIndex ? "primary" : "inherit"}
           ref={lidx === focusIndex ? focusRef : undefined}

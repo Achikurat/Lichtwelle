@@ -78,10 +78,9 @@ export default function AddressingEdit({
   const fixtureList = useMemo(() => {
     return addressings.map((addressing, idx) => {
       return (
-        <Tr key={idx} borderTop="12px solid" borderColor="bg.mid">
+        <Tr key={idx} borderTop="12px solid" borderColor="bg.dark">
           <Td bg="bg.dark" borderLeftRadius="md">
             <Text w="100%" color="primary" textAlign="center">
-              {" "}
               {"#" + idx}
             </Text>
           </Td>
@@ -132,10 +131,14 @@ export default function AddressingEdit({
           </Td>
           <Td bg="bg.dark" borderRightRadius="md">
             <HStack p="3" borderRadius="md">
-              <Button p="1" onClick={() => addAddressing(idx)}>
+              <Button variant="custom" p="1" onClick={() => addAddressing(idx)}>
                 <BsPlusLg />
               </Button>
-              <Button p="1" onClick={() => deleteAddressing(idx)}>
+              <Button
+                variant="custom"
+                p="1"
+                onClick={() => deleteAddressing(idx)}
+              >
                 <BsTrash />
               </Button>
             </HStack>
@@ -171,24 +174,22 @@ export default function AddressingEdit({
     <Tabs isFitted variant="enclosed">
       <TabList border="none !important">
         <Tab
-          border="none !important"
-          bg="bg.mid"
+          bg="bg.dark"
           color="text"
           mr="4"
           borderRadius="md"
           outline="1px solid"
-          outlineColor="transparent"
+          outlineColor="bg.mid"
           _selected={{ outlineColor: "primary" }}
         >
           Editor
         </Tab>
         <Tab
-          border="none !important"
-          bg="bg.mid"
+          bg="bg.dark"
           color="text"
           borderRadius="md"
           outline="1px solid"
-          outlineColor="transparent"
+          outlineColor="bg.mid"
           _selected={{ outlineColor: "primary" }}
         >
           Visualizer
@@ -196,8 +197,10 @@ export default function AddressingEdit({
       </TabList>
       <TabPanels
         mt="3"
-        bg="bg.mid"
+        bg="bg.dark"
         overflowY="auto"
+        outline="1px solid"
+        outlineColor="bg.mid"
         sx={{
           "&::-webkit-scrollbar": {
             w: "10px",
@@ -233,22 +236,11 @@ export default function AddressingEdit({
             </Table>
           </TableContainer>
           <Button
+            variant="custom"
             onClick={() => addAddressing(addressings.length)}
-            background="transparent"
-            border="2px dashed"
-            borderColor="bg.dark"
-            color="bg.dark"
             w="100%"
             h="50px"
             mt="20px"
-            _hover={{
-              borderColor: "primary",
-              color: "primary",
-            }}
-            _active={{
-              color: "bg.dark",
-              backgroundColor: "primary !important",
-            }}
           >
             <BsPlusLg size="40px" />
           </Button>

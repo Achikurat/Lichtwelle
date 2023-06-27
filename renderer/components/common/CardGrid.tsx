@@ -1,7 +1,6 @@
-import { Box, Button, HStack } from "@chakra-ui/react";
-import React, { ReactNode, useMemo } from "react";
+import { Button, HStack } from "@chakra-ui/react";
+import React, { ReactNode } from "react";
 import { BsPlusLg } from "react-icons/bs";
-import { useSessionStore } from "../../common/store/sessionStore";
 
 type Props = {
   children?: ReactNode;
@@ -12,9 +11,8 @@ export default function CardGrid({ children, cardAddAction }: Props) {
   return (
     <HStack
       p="5"
-      justifyContent="flexStart"
+      justifyContent="flex-start"
       alignItems="flex-start"
-      alignContent="flex-start"
       overflowX="auto"
       sx={{
         "&::-webkit-scrollbar": {
@@ -23,12 +21,12 @@ export default function CardGrid({ children, cardAddAction }: Props) {
         },
         "&::-webkit-scrollbar-track": {
           h: "10px",
-          bg: "bg.mid",
+          bg: "bg.dark",
           borderRadius: "md",
         },
         "&::-webkit-scrollbar-thumb": {
           borderRadius: "md",
-          bg: "bg.dark",
+          bg: "primary",
         },
       }}
     >

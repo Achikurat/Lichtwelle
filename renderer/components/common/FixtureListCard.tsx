@@ -67,7 +67,7 @@ export default function FixtureListCard({
           w="100%"
           h="40px"
           p="2"
-          bg="bg.mid"
+          bg="bg.dark"
           outline={
             selectedFixtures.indexOf(fixture.uid.key) != -1
               ? "1px solid white"
@@ -77,11 +77,10 @@ export default function FixtureListCard({
           borderRadius="md"
           flexShrink="0"
           justifyContent="space-between"
-          divider={<StackDivider borderColor="bg.dark" />}
           userSelect={isShiftDown || isControlDown ? "none" : "auto"}
         >
           <Tag>{`#F${fixture.uid.key}`}</Tag>
-          <Text color="text" size="sm" w="50px">{`${fixture.name}`}</Text>
+          <Text color="text" size="sm" w="70px">{`${fixture.name}`}</Text>
           <HStack
             w="80px"
             color="text"
@@ -98,53 +97,33 @@ export default function FixtureListCard({
   }, [fixtures, onClickFixtureItem, selectedFixtures]);
 
   return (
-    <VStack w="300px" bg="bg.dark" borderRadius="md" p="3">
+    <VStack borderRadius="md" p="3" border="1px solid" borderColor="bg.mid">
       <HStack
-        w="100%"
+        w="300px"
+        pb="3"
         borderBottom="1px solid"
-        borderColor="primary"
+        borderColor="text"
         justifyContent="space-between"
       >
         <VStack alignItems="flex-start">
-          <HStack alignItems="baseline" spacing="0">
-            <Text
-              size="sm"
-              color="secondary"
-            >{`${definition.manufacturer}/`}</Text>
-            <Text size="sm" color="secondary">
+          <HStack
+            alignItems="baseline"
+            spacing="0"
+            justifyContent="space-around"
+          >
+            <Text size="sm" color="text">{`${definition.manufacturer}/`}</Text>
+            <Text size="sm" color="text">
               {mode}
             </Text>
+            <Tag marginLeft="10px !important">{channels.length} Channel</Tag>
           </HStack>
-          <Heading size="md" color="primary">
-            {definition.name}
-          </Heading>
-        </VStack>
-        <VStack h="100%" alignItems="flex-start" justifyContent="flex-start">
-          <HStack spacing="1">
-            <VStack>
-              <Text size="sm" color="secondary">
-                ch
-              </Text>
-              <Heading size="md" color="primary">
-                {channels.length}
-              </Heading>
-            </VStack>
-            <VStack>
-              <Text size="lg" color="secondary" m="0">
-                /
-              </Text>
-              <Text size="lg" color="text" m="0">
-                /
-              </Text>
-            </VStack>
-            <VStack>
-              <Text size="sm" color="secondary">
-                fx
-              </Text>
-              <Heading size="md" color="secondary">
-                {fixtures.length}
-              </Heading>
-            </VStack>
+          <HStack>
+            <Heading size="md" color="primary">
+              {definition.name}
+            </Heading>
+            <Heading size="sm" color="secondary">
+              x {fixtures.length}
+            </Heading>
           </HStack>
         </VStack>
       </HStack>

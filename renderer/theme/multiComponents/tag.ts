@@ -6,8 +6,8 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const baseStyle = definePartsStyle({
   container: {
-    bg: "tag.purple",
-    color: "text",
+    bgGradient: "linear(to-r, primary, secondary)",
+    color: "bg.dark",
   },
 });
 

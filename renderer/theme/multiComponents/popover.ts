@@ -4,12 +4,12 @@ const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(parts.keys);
 const baseStyle = definePartsStyle({
   body: {
-    bg: "bg.mid",
+    bg: "bg.dark",
     p: "6",
     borderColor: "bg.mid !important",
   },
   content: {
-    bg: "bg.mid !imporant",
+    bg: "bg.dark !imporant",
     boxShadow: "xl",
     scrollbars: "none",
   },

@@ -10,17 +10,17 @@ const baseStyle = definePartsStyle({
     py: "4",
     borderRadius: "md",
     border: "none",
-    bg: "bg.mid",
+    bg: "bg.dark",
     mx: "auto !important",
   },
   item: {
-    bg: "bg.mid",
+    bg: "bg.dark",
     color: "text",
     _hover: {
       color: "secondary",
     },
     _active: {
-      bg: "bg.mid",
+      bg: "bg.dark",
       color: "primary",
     },
   },

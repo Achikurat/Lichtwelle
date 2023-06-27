@@ -7,7 +7,9 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   field: {
     p: "6",
-    bg: "bg.mid",
+    bg: "bg.dark",
+    border: "1px solid",
+    borderColor: "bg.mid",
     color: "text",
     outline: "none !important",
     _focus: {

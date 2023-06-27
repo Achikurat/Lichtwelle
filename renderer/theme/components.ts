@@ -26,6 +26,6 @@ export const FormLabel = defineStyleConfig({
 
 export const Divider = defineStyleConfig({
   baseStyle: {
-    borderColor: "primary",
+    borderColor: "text",
   },
 });

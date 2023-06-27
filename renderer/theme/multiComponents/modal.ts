@@ -10,18 +10,22 @@ const baseStyle = definePartsStyle({
     color: "text",
   },
   header: {
-    color: "primary",
+    color: "text",
   },
   closeButton: {
-    borderRadius: "md",
-    padding: "3",
-    backgroundColor: "bg.mid !important",
-    color: "primary",
-    fontSize: "md",
+    borderRadius: "25px",
+    padding: "6",
+    color: "text",
+    fontSize: "sm",
     boxSizing: "border-box !important",
-    border: "3px solid transparent",
-    _active: { color: "bg.dark", backgroundColor: "primary !important" },
-    _hover: { color: "secondary" },
+    border: "1px solid",
+    borderColor: "bg.mid",
+    _active: {
+      bgGradient: "linear(to-r, primary, secondary)",
+      color: "bg.dark",
+      borderColor: "transparent",
+    },
+    _hover: { color: "primary", borderColor: "primary" },
   },
 });
 

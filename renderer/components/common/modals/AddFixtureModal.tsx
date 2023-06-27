@@ -22,7 +22,7 @@ import AutoCompleteInput from "../AutoCompleteInput";
 import AddressingEdit from "../AddressingEdit";
 import { useInputState } from "../../../common/useInputState";
 import { createAutoAddressing, createFixtures } from "../../../common/fixture";
-import { BsTrash } from "react-icons/bs";
+import { BsTrash, BsX } from "react-icons/bs";
 
 type Props = {
   isOpen: boolean;
@@ -80,15 +80,16 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay backdropBlur="2px" />
       <ModalContent>
-        <ModalHeader>
-          <HStack>
-            <Heading>Add Fixture</Heading>
-            <Button p="2" mx="3" onClick={resetModal}>
+        <ModalHeader w="100%">
+          <HStack justifyContent="space-between" w="100%">
+            <Button onClick={resetModal} variant="custom" w="50px" h="50px">
               <BsTrash />
+            </Button>
+            <Button onClick={onClose} variant="custom" w="50px" h="50px">
+              <BsX />
             </Button>
           </HStack>
         </ModalHeader>
-        <ModalCloseButton />
         <ModalBody>
           <AutoCompleteInput
             placeholder="Search for fixtures..."
@@ -151,6 +152,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
                   {...inputProps["count"]}
                 />
                 <Button
+                  variant="custom"
                   w="300px"
                   onClick={() => {
                     setLocalAddressings(
@@ -189,6 +191,7 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
         </ModalBody>
         <ModalFooter>
           <Button
+            variant="custom"
             w="100%"
             isDisabled={
               inputState["name"] === "" || localAddressings.length === 0

@@ -16,7 +16,6 @@ const theme = extendTheme({
     colors: {
       primary: "#03A9F4",
       secondary: "#0288D1",
-      psg: "linear-gradient(45deg, rgba(3,169,244,1) 0%, rgba(2,136,209,1) 100%);",
       bg: {
         dark: "#2e2e3e",
         mid: "#49495f",
@@ -27,9 +26,6 @@ const theme = extendTheme({
         ok: "#00C853",
         warn: "#FFD300",
         error: "#F54436",
-      },
-      tag: {
-        purple: "#553E57",
       },
     },
   },

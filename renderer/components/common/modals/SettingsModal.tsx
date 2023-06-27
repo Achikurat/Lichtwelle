@@ -78,6 +78,7 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
             <FormLabel>Fixture Definition Location</FormLabel>
             <HStack height="55px">
               <Input
+                variant="custom"
                 height="100%"
                 onChange={(e) =>
                   setLocalPersistentSettings({
@@ -87,7 +88,12 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
                 }
                 value={localPersistentSettings.fixtureDefinitionsLocation}
               />
-              <Button width="50px" height="100%" onClick={selectDirectory}>
+              <Button
+                width="50px"
+                height="50px"
+                variant="custom"
+                onClick={selectDirectory}
+              >
                 <BsFolder />
               </Button>
             </HStack>
@@ -98,7 +104,9 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={updateSettings}>Save & Reload</Button>
+          <Button variant="custom" onClick={updateSettings}>
+            Save & Reload
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
