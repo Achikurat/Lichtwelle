@@ -70,7 +70,7 @@ export default function FixtureListCard({
           bg="bg.dark"
           outline={
             selectedFixtures.indexOf(fixture.uid.key) != -1
-              ? "1px solid white"
+              ? "1px solid #03A9F4"
               : "undefined"
           }
           onClick={() => onClickFixtureItem(fixture.uid.key)}
