@@ -44,8 +44,8 @@ export default function Layout({ children }: Props) {
             isActive={isActive}
             onMouseEnter={() => setHoveredView(View[view])}
             onMouseLeave={() => setHoveredView(null)}
-            borderRadius="md"
             h="100%"
+            variant="custom"
           >
             <HStack>
               {getTabIcon(View[view])}
@@ -75,17 +75,22 @@ export default function Layout({ children }: Props) {
           spacing="3"
         >
           {navigationTabs}
-          <Button ml="auto !important" order="2" onClick={onToggle}>
+          <Button
+            ml="auto !important"
+            order="2"
+            onClick={onToggle}
+            variant="custom"
+          >
             <BsGear />
           </Button>
           <SettingsModal isOpen={isOpen} onClose={onClose} />
         </HStack>
         <Box
           flexGrow="1"
-          background="bg.mid"
           w="100%"
           h="100%"
-          borderRadius="md"
+          borderTop="1px solid"
+          borderColor="bg.mid"
         >
           {children}
         </Box>

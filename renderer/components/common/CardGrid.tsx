@@ -35,23 +35,15 @@ export default function CardGrid({ children, cardAddAction }: Props) {
       {children}
       <Button
         onClick={cardAddAction}
+        variant="custom"
+        position="absolute"
         flexShrink="0"
         background="transparent"
-        border="2px dashed"
-        borderColor="bg.dark"
-        color="bg.dark"
-        w="300px"
-        h="150px"
-        _hover={{
-          borderColor: "primary",
-          color: "primary",
-        }}
-        _active={{
-          color: "bg.dark",
-          backgroundColor: "primary !important",
-        }}
+        top="100px"
+        right="20px"
+        h="50px"
       >
-        <BsPlusLg size="30px" />
+        <BsPlusLg /> Add Fixtures
       </Button>
     </HStack>
   );

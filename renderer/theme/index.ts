@@ -14,11 +14,12 @@ const theme = extendTheme({
   },
   semanticTokens: {
     colors: {
-      primary: "#DE8449",
-      secondary: "#EBB142",
+      primary: "#03A9F4",
+      secondary: "#0288D1",
+      psg: "linear-gradient(45deg, rgba(3,169,244,1) 0%, rgba(2,136,209,1) 100%);",
       bg: {
-        dark: "#2b2a33",
-        mid: "#363440",
+        dark: "#2e2e3e",
+        mid: "#49495f",
         light: "#6B6980",
       },
       text: "#C3C8D9",

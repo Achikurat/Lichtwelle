@@ -2,15 +2,19 @@ import { defineStyleConfig } from "@chakra-ui/react";
 
 export const Button = defineStyleConfig({
   baseStyle: {
-    borderRadius: "md",
+    borderRadius: "50px",
     padding: "6",
-    backgroundColor: "bg.mid !important",
-    color: "primary",
+    color: "text",
     fontSize: "md",
     boxSizing: "border-box !important",
-    border: "3px solid transparent",
-    _active: { color: "bg.dark", backgroundColor: "primary !important" },
-    _hover: { color: "secondary" },
+    border: "1px solid",
+    borderColor: "bg.mid",
+    _active: {
+      bgGradient: "linear(to-r, primary, secondary)",
+      color: "bg.dark",
+      borderColor: "transparent",
+    },
+    _hover: { color: "primary", borderColor: "primary" },
   },
 });
 
