@@ -2,7 +2,7 @@ import { defineStyleConfig } from "@chakra-ui/react";
 
 export const Button = defineStyleConfig({
   baseStyle: {
-    borderRadius: "50px",
+    borderRadius: "lg",
     padding: "6",
     color: "text",
     fontSize: "md",

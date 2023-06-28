@@ -1,15 +1,9 @@
 import { Button, HStack, useDisclosure, VStack } from "@chakra-ui/react";
-import React, {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { type } from "os";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { BsPlusLg } from "react-icons/bs";
-import { Fixture } from "../../lib/types";
 import { useSessionStore } from "../common/store/sessionStore";
-import { CardGrid } from "../components/common";
+import { CardGrid, FixtureCard } from "../components/common";
 import FixtureTypeCard from "../components/common/FixtureTypeCard";
 import { AddFixtureModal } from "../components/common/modals";
 
@@ -22,21 +16,74 @@ function Fixtures() {
   const [isControlDown, setIsControlDown] = useState<boolean>(false);
 
   const [selectedFixtures, setSelectedFixtures] = useState<number[]>([]);
-  const [shownFixtures, setShownFixtures] = useState<ReactElement[]>([]);
-
-  const onShowFixtureType = useCallback(
-    (fixutreItems: ReactElement[]) => {
-      if (isShiftDown) {
-        setShownFixtures(fixutreItems.concat(shownFixtures));
-      } else {
-        setShownFixtures(fixutreItems);
-      }
-    },
-    [shownFixtures, setShownFixtures, isShiftDown]
+  const [selectedFixtureTypes, setSelectedFixtureTypes] = useState<string[]>(
+    []
   );
 
+  const onSelectFixtureType = useCallback(
+    (typeKey: string) => {
+      if (selectedFixtureTypes.indexOf(typeKey) !== -1) {
+        if (isControlDown) {
+          setSelectedFixtureTypes([
+            ...selectedFixtureTypes.slice(
+              0,
+              selectedFixtureTypes.indexOf(typeKey)
+            ),
+            ...selectedFixtureTypes.slice(
+              selectedFixtureTypes.indexOf(typeKey) + 1
+            ),
+          ]);
+        } else {
+          if (selectedFixtureTypes.length > 1) {
+            setSelectedFixtureTypes([typeKey]);
+          } else {
+            setSelectedFixtureTypes([]);
+          }
+        }
+      } else {
+        if (isControlDown) {
+          setSelectedFixtureTypes(selectedFixtureTypes.concat(typeKey));
+        } else {
+          setSelectedFixtureTypes([typeKey]);
+        }
+      }
+    },
+    [selectedFixtureTypes, setSelectedFixtureTypes, isControlDown]
+  );
+
+  const onClickFixtureItem = (uidKey: number) => {
+    if (!isShiftDown && !isControlDown) {
+      setSelectedFixtures([uidKey]);
+    } else if (isShiftDown) {
+      window.getSelection().removeAllRanges();
+      const fixtureUidKeys = fixtures.map((fixture) => fixture.uid.key);
+      if (selectedFixtures.length !== 0) {
+        const indexOfSelection = fixtureUidKeys.indexOf(selectedFixtures[0]);
+        if (indexOfSelection !== -1) {
+          const indexOfClicked = fixtureUidKeys.indexOf(uidKey);
+          if (indexOfClicked !== -1) {
+            const fixturesInBetween = fixtureUidKeys.slice(
+              Math.min(indexOfSelection, indexOfClicked),
+              Math.max(indexOfSelection, indexOfClicked) + 1
+            );
+            setSelectedFixtures(fixturesInBetween);
+          }
+        }
+      }
+    } else if (isControlDown) {
+      if (selectedFixtures.indexOf(uidKey) !== -1) {
+        setSelectedFixtures([
+          ...selectedFixtures.slice(0, selectedFixtures.indexOf(uidKey)),
+          ...selectedFixtures.slice(selectedFixtures.indexOf(uidKey) + 1),
+        ]);
+      } else {
+        setSelectedFixtures(selectedFixtures.concat([uidKey]));
+      }
+    }
+  };
+
+  const fixturesByDefinition = {};
   const fixtureLists = useMemo(() => {
-    const fixturesByDefinition = {};
     fixtures.forEach((fx) => {
       const key = fx.definition.manufacturer + fx.definition.name + fx.mode;
       fixturesByDefinition[key]
@@ -44,26 +91,52 @@ function Fixtures() {
         : (fixturesByDefinition[key] = [fx]);
     });
 
-    return Object.values(fixturesByDefinition).map((values: Fixture[], idx) => {
+    return Object.keys(fixturesByDefinition).map((typeKey: string, idx) => {
       return (
         <FixtureTypeCard
           key={idx}
-          fixtures={values}
-          selectedFixtures={selectedFixtures}
-          onShowFixtureType={onShowFixtureType}
-          onUpdateSelectedFixtures={setSelectedFixtures}
-          isShiftDown={isShiftDown}
-          isControlDown={isControlDown}
+          fixtures={fixturesByDefinition[typeKey]}
+          selected={selectedFixtureTypes.indexOf(typeKey) !== -1}
+          typeKey={typeKey}
+          onSelectFixtureType={onSelectFixtureType}
         />
       );
     });
   }, [
     fixtures,
     selectedFixtures,
-    onShowFixtureType,
+    fixturesByDefinition,
+    selectedFixtureTypes,
+    onSelectFixtureType,
     setSelectedFixtures,
     isShiftDown,
     isControlDown,
+  ]);
+
+  const fixtureItems = useMemo(() => {
+    return selectedFixtureTypes.map((typeKey) => {
+      if (fixturesByDefinition[typeKey] !== undefined)
+        return fixturesByDefinition[typeKey].map((fixture, idx) => {
+          return (
+            <FixtureCard
+              key={idx}
+              fixture={fixture}
+              selected={selectedFixtures.indexOf(fixture.uid.key) !== -1}
+              onClickFixtureItem={onClickFixtureItem}
+              isControlDown={isControlDown}
+              isShiftDown={isShiftDown}
+            />
+          );
+        });
+    });
+  }, [
+    fixturesByDefinition,
+    fixtures,
+    selectedFixtures,
+    onClickFixtureItem,
+    selectedFixtureTypes,
+    isControlDown,
+    isShiftDown,
   ]);
 
   const onKeyEvent = useCallback(
@@ -108,7 +181,7 @@ function Fixtures() {
             <BsPlusLg /> Add Fixtures
           </Button>
         </VStack>
-        <CardGrid>{shownFixtures}</CardGrid>
+        <CardGrid>{fixtureItems}</CardGrid>
       </HStack>
       <AddFixtureModal isOpen={isOpen} onClose={onClose} />
     </>
