@@ -1,19 +1,20 @@
-import { Button, HStack } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
-import { BsPlusLg } from "react-icons/bs";
 
 type Props = {
   children?: ReactNode;
-  cardAddAction: () => void;
 };
 
-export default function CardGrid({ children, cardAddAction }: Props) {
+export default function CardGrid({ children }: Props) {
   return (
-    <HStack
-      p="5"
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      overflowX="auto"
+    <Box
+      h="100%"
+      w="100%"
+      p="1"
+      boxSizing="border-box"
+      overflowY="auto"
+      columnGap="3"
+      rowGap="3"
       sx={{
         "&::-webkit-scrollbar": {
           h: "10px",
@@ -31,18 +32,6 @@ export default function CardGrid({ children, cardAddAction }: Props) {
       }}
     >
       {children}
-      <Button
-        onClick={cardAddAction}
-        variant="custom"
-        position="absolute"
-        flexShrink="0"
-        background="transparent"
-        top="100px"
-        right="20px"
-        h="50px"
-      >
-        <BsPlusLg /> Add Fixtures
-      </Button>
-    </HStack>
+    </Box>
   );
 }

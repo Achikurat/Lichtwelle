@@ -1,6 +1,13 @@
 import AddressingEdit from "./AddressingEdit";
 import AutoCompleteInput from "./AutoCompleteInput";
 import CardGrid from "./CardGrid";
-import FixtureListCard from "./FixtureListCard";
+import FixtureCard from "./FixtureCard";
+import FixtureTypeCard from "./FixtureTypeCard";
 
-export { CardGrid, FixtureListCard, AutoCompleteInput, AddressingEdit };
+export {
+  CardGrid,
+  FixtureTypeCard,
+  FixtureCard,
+  AutoCompleteInput,
+  AddressingEdit,
+};

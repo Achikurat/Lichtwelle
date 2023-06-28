@@ -1,13 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import {
-  Box,
-  Button,
-  Center,
-  Collapse,
-  HStack,
-  VStack,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, HStack, VStack, useDisclosure } from "@chakra-ui/react";
 import { View } from "../../../lib/enums";
 import { ReactNode, useMemo } from "react";
 import Link from "next/link";
@@ -16,7 +8,6 @@ import {
   BsHouse,
   BsQuestionCircle,
   BsLamp,
-  BsFolder,
   BsCaretRightSquare,
   BsGrid3X3,
   BsSoundwave,
@@ -44,7 +35,7 @@ export default function Layout({ children }: Props) {
             isActive={isActive}
             onMouseEnter={() => setHoveredView(View[view])}
             onMouseLeave={() => setHoveredView(null)}
-            h="100%"
+            h="50px"
             variant="custom"
           >
             <HStack>
@@ -60,42 +51,32 @@ export default function Layout({ children }: Props) {
   }, [router.pathname, hoverdView, setHoveredView]);
 
   return (
-    <Center h="100vh" w="100vw" p="3">
-      <VStack
-        h="100%"
+    <Box h="100vh" w="100vw" p="0" m="0" overflow="hidden">
+      <HStack
+        p="3"
         w="100%"
+        h="80px"
         justifyContent="flex-start"
-        alignItems="stretch"
+        alignItems="baseline"
         spacing="3"
+        borderBottom="1px solid"
+        borderColor="bg.mid"
       >
-        <HStack
-          h="50px"
-          justifyContent="flex-start"
-          alignItems="baseline"
-          spacing="3"
+        {navigationTabs}
+        <Button
+          ml="auto !important"
+          order="2"
+          onClick={onToggle}
+          variant="custom"
         >
-          {navigationTabs}
-          <Button
-            ml="auto !important"
-            order="2"
-            onClick={onToggle}
-            variant="custom"
-          >
-            <BsGear />
-          </Button>
-          <SettingsModal isOpen={isOpen} onClose={onClose} />
-        </HStack>
-        <Box
-          flexGrow="1"
-          w="100%"
-          h="100%"
-          borderTop="1px solid"
-          borderColor="bg.mid"
-        >
-          {children}
-        </Box>
-      </VStack>
-    </Center>
+          <BsGear />
+        </Button>
+        <SettingsModal isOpen={isOpen} onClose={onClose} />
+      </HStack>
+      <Box h="calc(100vh - 80px)" w="100%">
+        {children}
+      </Box>
+    </Box>
   );
 }
 

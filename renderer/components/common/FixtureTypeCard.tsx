@@ -1,26 +1,22 @@
-import {
-  Heading,
-  HStack,
-  StackDivider,
-  Tag,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import { Button, Heading, HStack, Tag, Text, VStack } from "@chakra-ui/react";
+import React, { ReactElement, ReactNode, useMemo } from "react";
 import { Fixture } from "../../../lib/types";
+import FixtureCard from "./FixtureCard";
 
 type Props = {
   fixtures: Fixture[];
   selectedFixtures: number[];
   onUpdateSelectedFixtures: (uidKeys: number[]) => void;
+  onShowFixtureType: (fixtureCards: ReactElement[]) => void;
   isShiftDown?: boolean;
   isControlDown?: boolean;
 };
 
-export default function FixtureListCard({
+export default function FixtureTypeCard({
   fixtures,
   selectedFixtures,
   onUpdateSelectedFixtures,
+  onShowFixtureType,
   isShiftDown = false,
   isControlDown = false,
 }: Props) {
@@ -59,10 +55,11 @@ export default function FixtureListCard({
     }
   };
 
-  const fixtureItem = useMemo(() => {
+  const fixtureItems = useMemo(() => {
     return fixtures.map((fixture, key) => {
       return (
-        <HStack
+        <FixtureCard key={key} fixture={fixture} />
+        /*  <HStack
           key={key}
           w="100%"
           h="40px"
@@ -91,67 +88,34 @@ export default function FixtureListCard({
             <Text>–</Text>
             <Text>{fixture.addressing.lastChannel}</Text>
           </HStack>
-        </HStack>
+        </HStack> */
       );
     });
   }, [fixtures, onClickFixtureItem, selectedFixtures]);
 
   return (
-    <VStack borderRadius="md" p="3" border="1px solid" borderColor="bg.mid">
-      <HStack
-        w="300px"
-        pb="3"
-        borderBottom="1px solid"
-        borderColor="text"
-        justifyContent="space-between"
-      >
-        <VStack alignItems="flex-start">
-          <HStack
-            alignItems="baseline"
-            spacing="0"
-            justifyContent="space-around"
-          >
-            <Text size="sm" color="text">{`${definition.manufacturer}/`}</Text>
-            <Text size="sm" color="text">
-              {mode}
-            </Text>
-            <Tag marginLeft="10px !important">{channels.length} Channel</Tag>
-          </HStack>
-          <HStack>
-            <Heading size="md" color="primary">
-              {definition.name}
-            </Heading>
-            <Heading size="sm" color="secondary">
-              x {fixtures.length}
-            </Heading>
-          </HStack>
-        </VStack>
-      </HStack>
-      {/* Body */}
-      <VStack
-        w="100%"
-        h="600px"
-        p="2"
-        overflowY="auto"
-        sx={{
-          "&::-webkit-scrollbar": {
-            w: "10px",
-            borderRadius: "md",
-          },
-          "&::-webkit-scrollbar-track": {
-            w: "10px",
-            bg: "bg.dark",
-            borderRadius: "md",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            borderRadius: "md",
-            bg: "primary",
-          },
-        }}
-        overflowX="hidden"
-      >
-        {fixtureItem}
+    <Button
+      variant="custom"
+      onClick={() => onShowFixtureType(fixtureItems)}
+      h="100px"
+      w="100%"
+    >
+      <VStack alignItems="flex-start">
+        <HStack alignItems="baseline" spacing="0" justifyContent="space-around">
+          <Text size="sm" color="text">{`${definition.manufacturer}/`}</Text>
+          <Text size="sm" color="text">
+            {mode}
+          </Text>
+        </HStack>
+        <HStack>
+          <Heading size="md" color="primary">
+            {definition.name}
+          </Heading>
+          <Heading size="sm" color="secondary">
+            x {fixtures.length}
+          </Heading>
+        </HStack>
       </VStack>
-    </VStack>
+    </Button>
   );
 }

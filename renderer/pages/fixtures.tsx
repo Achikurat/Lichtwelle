@@ -1,8 +1,16 @@
-import { useDisclosure } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, HStack, useDisclosure, VStack } from "@chakra-ui/react";
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { BsPlusLg } from "react-icons/bs";
 import { Fixture } from "../../lib/types";
 import { useSessionStore } from "../common/store/sessionStore";
-import { CardGrid, FixtureListCard } from "../components/common";
+import { CardGrid } from "../components/common";
+import FixtureTypeCard from "../components/common/FixtureTypeCard";
 import { AddFixtureModal } from "../components/common/modals";
 
 function Fixtures() {
@@ -14,6 +22,18 @@ function Fixtures() {
   const [isControlDown, setIsControlDown] = useState<boolean>(false);
 
   const [selectedFixtures, setSelectedFixtures] = useState<number[]>([]);
+  const [shownFixtures, setShownFixtures] = useState<ReactElement[]>([]);
+
+  const onShowFixtureType = useCallback(
+    (fixutreItems: ReactElement[]) => {
+      if (isShiftDown) {
+        setShownFixtures(fixutreItems.concat(shownFixtures));
+      } else {
+        setShownFixtures(fixutreItems);
+      }
+    },
+    [shownFixtures, setShownFixtures, isShiftDown]
+  );
 
   const fixtureLists = useMemo(() => {
     const fixturesByDefinition = {};
@@ -26,10 +46,11 @@ function Fixtures() {
 
     return Object.values(fixturesByDefinition).map((values: Fixture[], idx) => {
       return (
-        <FixtureListCard
+        <FixtureTypeCard
           key={idx}
           fixtures={values}
           selectedFixtures={selectedFixtures}
+          onShowFixtureType={onShowFixtureType}
           onUpdateSelectedFixtures={setSelectedFixtures}
           isShiftDown={isShiftDown}
           isControlDown={isControlDown}
@@ -39,6 +60,7 @@ function Fixtures() {
   }, [
     fixtures,
     selectedFixtures,
+    onShowFixtureType,
     setSelectedFixtures,
     isShiftDown,
     isControlDown,
@@ -65,7 +87,29 @@ function Fixtures() {
 
   return (
     <>
-      <CardGrid cardAddAction={onOpen}>{fixtureLists}</CardGrid>
+      <HStack w="100%" h="100%" spacing="0">
+        <VStack
+          p="3"
+          w="300px"
+          h="100%"
+          borderRight="1px solid"
+          borderColor="bg.mid"
+          alignItems="flex-start"
+        >
+          {fixtureLists}
+          <Button
+            onClick={onOpen}
+            variant="custom"
+            flexShrink="0"
+            background="transparent"
+            w="100%"
+            h="50px"
+          >
+            <BsPlusLg /> Add Fixtures
+          </Button>
+        </VStack>
+        <CardGrid>{shownFixtures}</CardGrid>
+      </HStack>
       <AddFixtureModal isOpen={isOpen} onClose={onClose} />
     </>
   );

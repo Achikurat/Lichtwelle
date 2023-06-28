@@ -1,7 +1,7 @@
 import electron from "electron";
 import React, { useEffect, useState } from "react";
 import { AppProps } from "next/app";
-import { Center, ChakraProvider, Spinner } from "@chakra-ui/react";
+import { Box, Center, ChakraProvider, Spinner } from "@chakra-ui/react";
 import theme from "../theme";
 import { Layout } from "../components/layout";
 import { reloadFixtureDefinitions } from "../common/fixture";
