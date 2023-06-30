@@ -6,11 +6,15 @@ import { useSessionStore } from "../common/store/sessionStore";
 import { CardGrid, FixtureCard } from "../components/common";
 import FixtureTypeCard from "../components/common/FixtureTypeCard";
 import { AddFixtureModal } from "../components/common/modals";
+import ContextMenuWrapper from "../components/common/ContextMenuWrapper";
 
 function Fixtures() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const fixtures = useSessionStore((state) => state.fixtures);
+  const [fixtures, updateSessionState] = useSessionStore((state) => [
+    state.fixtures,
+    state.updateSessionState,
+  ]);
 
   const [isShiftDown, setIsShiftDown] = useState<boolean>(false);
   const [isControlDown, setIsControlDown] = useState<boolean>(false);
@@ -149,6 +153,14 @@ function Fixtures() {
     [setIsShiftDown, setIsControlDown]
   );
 
+  const deleteSelection = useCallback(() => {
+    updateSessionState({
+      fixtures: fixtures.filter(
+        (fixture, idx) => selectedFixtures.indexOf(idx) !== -1
+      ),
+    });
+  }, [selectedFixtures]);
+
   useEffect(() => {
     window.addEventListener("keydown", onKeyEvent);
     window.addEventListener("keyup", onKeyEvent);
@@ -168,6 +180,22 @@ function Fixtures() {
           borderRight="1px solid"
           borderColor="bg.mid"
           alignItems="flex-start"
+          overflowY="auto"
+          sx={{
+            "&::-webkit-scrollbar": {
+              h: "10px",
+              borderRadius: "md",
+            },
+            "&::-webkit-scrollbar-track": {
+              h: "10px",
+              bg: "bg.dark",
+              borderRadius: "md",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              borderRadius: "md",
+              bg: "primary",
+            },
+          }}
         >
           {fixtureLists}
           <Button
@@ -181,7 +209,11 @@ function Fixtures() {
             <BsPlusLg /> Add Fixtures
           </Button>
         </VStack>
-        <CardGrid>{fixtureItems}</CardGrid>
+        <ContextMenuWrapper
+          items={[{ label: "Delete", onClick: deleteSelection }]}
+        >
+          <CardGrid>{fixtureItems}</CardGrid>
+        </ContextMenuWrapper>
       </HStack>
       <AddFixtureModal isOpen={isOpen} onClose={onClose} />
     </>

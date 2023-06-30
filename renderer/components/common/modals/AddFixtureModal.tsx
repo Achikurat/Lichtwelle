@@ -82,12 +82,15 @@ export default function AddFixtureModal({ isOpen, onClose }: Props) {
       <ModalContent>
         <ModalHeader w="100%">
           <HStack justifyContent="space-between" w="100%">
-            <Button onClick={resetModal} variant="custom" w="50px" h="50px">
-              <BsTrash />
-            </Button>
-            <Button onClick={onClose} variant="custom" w="50px" h="50px">
-              <BsX />
-            </Button>
+            <Text>Add Fixtures</Text>
+            <HStack justifyContent="space-between" w="120px">
+              <Button onClick={resetModal} variant="custom" w="50px" h="50px">
+                <BsTrash />
+              </Button>
+              <Button onClick={onClose} variant="custom" w="50px" h="50px">
+                <BsX />
+              </Button>
+            </HStack>
           </HStack>
         </ModalHeader>
         <ModalBody>

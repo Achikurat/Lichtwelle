@@ -36,6 +36,23 @@ const theme = extendTheme({
         w: "100vw",
         h: "100vh",
       },
+      div: {
+        sx: {
+          "&::-webkit-scrollbar": {
+            h: "10px !important",
+            borderRadius: "md",
+          },
+          "&::-webkit-scrollbar-track": {
+            h: "10px",
+            bg: "bg.dark !important",
+            borderRadius: "md",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            borderRadius: "md",
+            bg: "primary !important",
+          },
+        },
+      },
     }),
   },
   components: {

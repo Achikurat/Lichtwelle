@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -19,7 +20,7 @@ import { useSessionStore } from "../../../common/store/sessionStore";
 import { PersistentSettings } from "../../../../lib/types";
 import { reloadFixtureDefinitions } from "../../../common/fixture";
 import { usePersistentStore } from "../../../common/store/persistentStore";
-import { BsFolder } from "react-icons/bs";
+import { BsFolder, BsX } from "react-icons/bs";
 import electron, { OpenDialogReturnValue } from "electron";
 import { IpcMessageType } from "../../../../lib/enums";
 
@@ -71,8 +72,14 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay backdropBlur="2px" />
       <ModalContent>
-        <ModalHeader>Application Settings</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader w="100%">
+          <HStack justifyContent="space-between" w="100%">
+            <Text>Application Settings</Text>
+            <Button onClick={onClose} variant="custom" w="50px" h="50px">
+              <BsX />
+            </Button>
+          </HStack>
+        </ModalHeader>
         <ModalBody>
           <FormControl spellCheck="false">
             <FormLabel>Fixture Definition Location</FormLabel>

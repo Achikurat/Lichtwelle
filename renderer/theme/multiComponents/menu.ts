@@ -8,16 +8,17 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   list: {
     py: "4",
-    borderRadius: "md",
+    borderRadius: "lg",
     border: "none",
+    boxShadow: "2xl",
     bg: "bg.dark",
-    mx: "auto !important",
   },
   item: {
     bg: "bg.dark",
     color: "text",
     _hover: {
-      color: "secondary",
+      bgGradient: "linear(to-r, primary, secondary)",
+      color: "bg.dark",
     },
     _active: {
       bg: "bg.dark",
