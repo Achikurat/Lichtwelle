@@ -7,14 +7,14 @@ import { CardGrid, FixtureCard } from "../components/common";
 import FixtureTypeCard from "../components/common/FixtureTypeCard";
 import { AddFixtureModal } from "../components/common/modals";
 import ContextMenuWrapper from "../components/common/ContextMenuWrapper";
+import { deleteFixtures } from "../common/fixture";
 
 function Fixtures() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [fixtures, updateSessionState] = useSessionStore((state) => [
-    state.fixtures,
-    state.updateSessionState,
-  ]);
+  const fixtures = useSessionStore((state) => state.fixtures);
+
+  console.log(fixtures);
 
   const [isShiftDown, setIsShiftDown] = useState<boolean>(false);
   const [isControlDown, setIsControlDown] = useState<boolean>(false);
@@ -154,11 +154,8 @@ function Fixtures() {
   );
 
   const deleteSelection = useCallback(() => {
-    updateSessionState({
-      fixtures: fixtures.filter(
-        (fixture, idx) => selectedFixtures.indexOf(idx) !== -1
-      ),
-    });
+    deleteFixtures(selectedFixtures);
+    setSelectedFixtureTypes([]);
   }, [selectedFixtures]);
 
   useEffect(() => {

@@ -3,7 +3,6 @@ import { Addressing, Fixture, FixtureDefinition } from "../../lib/types";
 import { useSessionStore } from "./store/sessionStore";
 import { IpcMessageType, UidType } from "../../lib/enums";
 import { usePersistentStore } from "./store/persistentStore";
-import next from "next/types";
 
 const ipcRenderer = electron.ipcRenderer || false;
 
@@ -12,7 +11,6 @@ export function addFixtures(fixtures: Fixture[]) {
     fixtures: [...useSessionStore.getState().fixtures, ...fixtures],
   });
   updateFixtureUids();
-  console.log(useSessionStore.getState().fixtures);
 }
 
 export function updateFixtureUids() {
@@ -25,6 +23,15 @@ export function updateFixtureUids() {
       [UidType.FIXTURE]: fixtureUidKeys,
     },
   });
+}
+
+export function deleteFixtures(uidKeys: number[]) {
+  useSessionStore.setState({
+    fixtures: useSessionStore
+      .getState()
+      .fixtures.filter((fixture) => uidKeys.indexOf(fixture.uid.key) === -1),
+  });
+  updateFixtureUids();
 }
 
 export function createFixtures(
@@ -88,7 +95,7 @@ export function nextFreeUidKeys(amount: number): number[] {
 
 export function nextFreeUidKey(overrideUids?: number[]) {
   const fixtureUidKeys =
-    overrideUids ||
+    overrideUids.sort((a, b) => a - b) ||
     useSessionStore.getState().uids[UidType.FIXTURE].sort((a, b) => a - b);
   var cKey = 1;
   fixtureUidKeys.every((key) => {

@@ -3,11 +3,9 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  IconButton,
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -111,7 +109,7 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button variant="custom" onClick={updateSettings}>
+          <Button variant="custom" w="100%" onClick={updateSettings}>
             Save & Reload
           </Button>
         </ModalFooter>
